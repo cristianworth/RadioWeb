@@ -1,0 +1,16 @@
+To do:
+Deixar tamanho do button fixo;
+Colocar min e max no Slider;
+Usar Logs no código;
+Comunicação do Programa 1 com o Programa 2(JSON/XML);
+
+Programa 1:
+Web-socket/web-service
+
+Programa 2:
+Cada radio numa porta especifica
+Banco de dados, para gravar playlist/organização/mensagens 
+
+Programa 3:
+Play/Pause/Stop - Definir URL
+
