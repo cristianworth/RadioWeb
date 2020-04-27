@@ -21,7 +21,7 @@ public class GUIClient extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jbPlayPause.setText("Play️");
+        jbPlayPause.setText("PLAY ▶");
         jbPlayPause.setPreferredSize(new java.awt.Dimension(85, 25));
         jbPlayPause.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -100,10 +100,10 @@ public class GUIClient extends javax.swing.JFrame {
     private void jbPlayPauseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbPlayPauseMouseClicked
         if (isSelected) {
             isSelected = false;
-            jbPlayPause.setText("Pause ⏸");
+            jbPlayPause.setText("STOP ⏹");
         } else {
             isSelected = true;
-            jbPlayPause.setText("Play ️");
+            jbPlayPause.setText("PLAY ▶");
         }
     }//GEN-LAST:event_jbPlayPauseMouseClicked
 
