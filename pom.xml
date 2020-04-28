@@ -5,6 +5,13 @@
     <artifactId>RadioWeb</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>MpegAudioSPI1</groupId>
+            <artifactId>MpegAudioSPI1</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+    </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>

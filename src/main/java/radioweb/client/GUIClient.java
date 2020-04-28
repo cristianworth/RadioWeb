@@ -1,8 +1,14 @@
 package radioweb.client;
 
+import java.io.BufferedInputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class GUIClient extends javax.swing.JFrame {
     boolean isSelected = true;
-    
+    PlayerController pc;
     public GUIClient() {
         initComponents();
         jsVolume.setMinimum(0);
@@ -101,9 +107,18 @@ public class GUIClient extends javax.swing.JFrame {
         if (isSelected) {
             isSelected = false;
             jbPlayPause.setText("STOP ⏹");
+            try{
+                //https://gamepedia.cursecdn.com/dota2_gamepedia/f/fb/Vo_nyx_assassin_nyx_laugh_06.mp3
+           pc = new PlayerController("https://gamepedia.cursecdn.com/dota2_gamepedia/b/b0/Vo_nyx_assassin_nyx_death_18.mp3",false);
+            pc.start();
+        } catch (NullPointerException ex) {
+                
+        } 
         } else {
+             pc.close();
             isSelected = true;
             jbPlayPause.setText("PLAY ▶");
+            
         }
     }//GEN-LAST:event_jbPlayPauseMouseClicked
 
