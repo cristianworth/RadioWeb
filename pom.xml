@@ -10,6 +10,11 @@
             <groupId>MpegAudioSPI1</groupId>
             <artifactId>MpegAudioSPI1</artifactId>
             <version>1.9.5</version>
+        </dependency>                   
+        <dependency>
+            <groupId>com.jtattoo</groupId>
+            <artifactId>JTattoo</artifactId>
+            <version>1.6.13</version>
         </dependency>
     </dependencies>
     <properties>
