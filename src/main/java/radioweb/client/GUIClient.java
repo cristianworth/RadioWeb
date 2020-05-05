@@ -1,9 +1,16 @@
 package radioweb.client;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.Line;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.Mixer;
 import javax.swing.UIManager;
 
 public class GUIClient extends javax.swing.JFrame {
     boolean isSelected = true;
+    float volume = 0;
     PlayerController pc;
     public GUIClient() {
         initComponents();
@@ -105,7 +112,7 @@ public class GUIClient extends javax.swing.JFrame {
             jbPlayPause.setText("STOP ⏹");
             try{
                 //https://gamepedia.cursecdn.com/dota2_gamepedia/f/fb/Vo_nyx_assassin_nyx_laugh_06.mp3
-           pc = new PlayerController("https://gamepedia.cursecdn.com/dota2_gamepedia/b/b0/Vo_nyx_assassin_nyx_death_18.mp3",false);
+           pc = new PlayerController("https://download.mp3free-is.fun/k/Jimmy-Eat-World-The-Middle.mp3",false);
             pc.start();
         } catch (NullPointerException ex) {
                 
@@ -119,7 +126,51 @@ public class GUIClient extends javax.swing.JFrame {
     }//GEN-LAST:event_jbPlayPauseMouseClicked
 
     private void jsVolumeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jsVolumeStateChanged
-        System.out.println("Volume atual: " + jsVolume.getValue());
+Mixer.Info [] mixers = AudioSystem.getMixerInfo();  
+System.out.println("There are " + mixers.length + " mixer info objects");  
+for (Mixer.Info mixerInfo : mixers)  
+{  
+    System.out.println("Mixer name: " + mixerInfo.getName());  
+    Mixer mixer = AudioSystem.getMixer(mixerInfo);  
+    Line.Info [] lineInfos = mixer.getTargetLineInfo(); // target, not source  
+    for (Line.Info lineInfo : lineInfos)  
+    {  
+        System.out.println("  Line.Info: " + lineInfo);  
+        Line line = null;  
+        boolean opened = true;  
+        try  
+        {  
+            line = mixer.getLine(lineInfo);  
+            opened = line.isOpen() || line instanceof Clip;  
+            if (!opened)  
+            {  
+                line.open();  
+            }
+           float  v1 = jsVolume.getValue();
+           volume = v1/100;
+            FloatControl volCtrl = (FloatControl)line.getControl(FloatControl.Type.VOLUME);
+            volCtrl.setValue(volume);
+            System.out.println("    volCtrl.getValue() = " + volCtrl.getValue());  
+        }  
+        catch (LineUnavailableException e)  
+        {  
+            e.printStackTrace();  
+        }  
+        catch (IllegalArgumentException iaEx)  
+        {  
+            System.out.println("    " + iaEx);  
+        }  
+        finally  
+        {  
+            if (line != null && !opened)  
+            {  
+                line.close();  
+            }  
+        }  
+    }  
+} 
+        System.out.println("var" + volume);
+        System.out.println("Volume atual: " + jsVolume.getValue()/100);
     }//GEN-LAST:event_jsVolumeStateChanged
 
     private void jsVolumeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jsVolumeMouseReleased
