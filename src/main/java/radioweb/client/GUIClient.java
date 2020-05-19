@@ -6,6 +6,7 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.Line;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
+import javax.sound.sampled.Port;
 import javax.swing.UIManager;
 
 public class GUIClient extends javax.swing.JFrame {
@@ -131,7 +132,8 @@ System.out.println("There are " + mixers.length + " mixer info objects");
 for (Mixer.Info mixerInfo : mixers)  
 {  
     System.out.println("Mixer name: " + mixerInfo.getName());  
-    Mixer mixer = AudioSystem.getMixer(mixerInfo);  
+    Mixer mixer = AudioSystem.getMixer(mixerInfo); 
+    
     Line.Info [] lineInfos = mixer.getTargetLineInfo(); // target, not source  
     for (Line.Info lineInfo : lineInfos)  
     {  
@@ -149,7 +151,9 @@ for (Mixer.Info mixerInfo : mixers)
            float  v1 = jsVolume.getValue();
            volume = v1/100;
             FloatControl volCtrl = (FloatControl)line.getControl(FloatControl.Type.VOLUME);
+            if(mixer.isLineSupported(Port.Info.SPEAKER)){
             volCtrl.setValue(volume);
+            }
             System.out.println("    volCtrl.getValue() = " + volCtrl.getValue());  
         }  
         catch (LineUnavailableException e)  
