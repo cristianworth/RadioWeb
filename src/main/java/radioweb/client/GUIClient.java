@@ -1,5 +1,9 @@
 package radioweb.client;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
@@ -7,6 +11,10 @@ import javax.sound.sampled.Line;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.Port;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.UIManager;
 
 public class GUIClient extends javax.swing.JFrame {
@@ -17,8 +25,31 @@ public class GUIClient extends javax.swing.JFrame {
         initComponents();
         jsVolume.setMinimum(0);
         jsVolume.setMaximum(100);
+        
+        try {
+            mostraGif();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(GUIClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    private void mostraGif () throws MalformedURLException {
+        URL url = new URL("https://media.tenor.com/images/54641b188e6f6e13f15f927a2fb0fc81/tenor.gif");
+        Icon icon = new ImageIcon(url);
+        JLabel label = new JLabel(icon);
+
+        JFrame f = new JFrame("Emote AlienPls");
+        f.getContentPane().add(label);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.pack();
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        
+        //URL url = new URL("https://cdn.betterttv.net/emote/5805580c3d506fea7ee357d6/1x");
+        //Icon icon = new ImageIcon(url);
+        //jlGif.setIcon(icon);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
