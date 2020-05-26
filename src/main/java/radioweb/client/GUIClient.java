@@ -1,5 +1,6 @@
 package radioweb.client;
 
+import java.awt.Image;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -18,14 +19,16 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 
 public class GUIClient extends javax.swing.JFrame {
+
     boolean isSelected = true;
     float volume = 0;
     PlayerController pc;
+
     public GUIClient() {
         initComponents();
         jsVolume.setMinimum(0);
         jsVolume.setMaximum(100);
-        
+
         try {
             mostraGif();
         } catch (MalformedURLException ex) {
@@ -33,23 +36,18 @@ public class GUIClient extends javax.swing.JFrame {
         }
     }
 
-    private void mostraGif () throws MalformedURLException {
-        URL url = new URL("https://media.tenor.com/images/54641b188e6f6e13f15f927a2fb0fc81/tenor.gif");
-        Icon icon = new ImageIcon(url);
-        JLabel label = new JLabel(icon);
-
-        JFrame f = new JFrame("Emote AlienPls");
-        f.getContentPane().add(label);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.pack();
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
+    private void mostraGif() throws MalformedURLException {
+        URL url = new URL("https://cdn.betterttv.net/emote/5805580c3d506fea7ee357d6/1x");
+        ImageIcon image = new javax.swing.ImageIcon(url);
         
-        //URL url = new URL("https://cdn.betterttv.net/emote/5805580c3d506fea7ee357d6/1x");
-        //Icon icon = new ImageIcon(url);
-        //jlGif.setIcon(icon);
+        //ImageIcon image = new javax.swing.ImageIcon(getClass().getResource("/tenor.gif"));
+        int width = 100;
+        int height = 100;
+        image.setImage(image.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT));
+        
+        //jlGif.setIcon(image);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -59,6 +57,7 @@ public class GUIClient extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jsVolume = new javax.swing.JSlider();
+        jlGif = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,22 +88,20 @@ public class GUIClient extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
-                        .addComponent(jLabel1))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(102, 102, 102)
+                        .addComponent(jsVolume, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(139, 139, 139)
-                        .addComponent(jbPlayPause, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jbPlayPause, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addComponent(jLabel1)
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(102, 102, 102)
-                .addComponent(jsVolume, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,20 +115,28 @@ public class GUIClient extends javax.swing.JFrame {
                 .addComponent(jsVolume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jlGif.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(92, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jlGif, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17)
+                .addComponent(jlGif, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -142,70 +147,59 @@ public class GUIClient extends javax.swing.JFrame {
         if (isSelected) {
             isSelected = false;
             jbPlayPause.setText("STOP ⏹");
-            try{
+            try {
                 //https://gamepedia.cursecdn.com/dota2_gamepedia/f/fb/Vo_nyx_assassin_nyx_laugh_06.mp3
-           pc = new PlayerController("https://download.mp3free-is.fun/k/Jimmy-Eat-World-The-Middle.mp3",false);
-            pc.start();
-        } catch (NullPointerException ex) {
-                
-        } 
+                pc = new PlayerController("https://gamepedia.cursecdn.com/dota2_gamepedia/f/fb/Vo_nyx_assassin_nyx_laugh_06.mp3", false);
+                pc.start();
+            } catch (NullPointerException ex) {
+
+            }
         } else {
-             pc.close();
+            pc.close();
             isSelected = true;
             jbPlayPause.setText("PLAY ▶");
-            
+
         }
     }//GEN-LAST:event_jbPlayPauseMouseClicked
 
     private void jsVolumeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jsVolumeStateChanged
-Mixer.Info [] mixers = AudioSystem.getMixerInfo();  
-System.out.println("There are " + mixers.length + " mixer info objects");  
-for (Mixer.Info mixerInfo : mixers)  
-{  
-    System.out.println("Mixer name: " + mixerInfo.getName());  
-    Mixer mixer = AudioSystem.getMixer(mixerInfo); 
-    
-    Line.Info [] lineInfos = mixer.getTargetLineInfo(); // target, not source  
-    for (Line.Info lineInfo : lineInfos)  
-    {  
-        System.out.println("  Line.Info: " + lineInfo);  
-        Line line = null;  
-        boolean opened = true;  
-        try  
-        {  
-            line = mixer.getLine(lineInfo);  
-            opened = line.isOpen() || line instanceof Clip;  
-            if (!opened)  
-            {  
-                line.open();  
+        Mixer.Info[] mixers = AudioSystem.getMixerInfo();
+        System.out.println("There are " + mixers.length + " mixer info objects");
+        for (Mixer.Info mixerInfo : mixers) {
+            System.out.println("Mixer name: " + mixerInfo.getName());
+            Mixer mixer = AudioSystem.getMixer(mixerInfo);
+
+            Line.Info[] lineInfos = mixer.getTargetLineInfo(); // target, not source  
+            for (Line.Info lineInfo : lineInfos) {
+                System.out.println("  Line.Info: " + lineInfo);
+                Line line = null;
+                boolean opened = true;
+                try {
+                    line = mixer.getLine(lineInfo);
+                    opened = line.isOpen() || line instanceof Clip;
+                    if (!opened) {
+                        line.open();
+                    }
+                    float v1 = jsVolume.getValue();
+                    volume = v1 / 100;
+                    FloatControl volCtrl = (FloatControl) line.getControl(FloatControl.Type.VOLUME);
+                    if (mixer.isLineSupported(Port.Info.SPEAKER)) {
+                        volCtrl.setValue(volume);
+                    }
+                    System.out.println("    volCtrl.getValue() = " + volCtrl.getValue());
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                } catch (IllegalArgumentException iaEx) {
+                    System.out.println("    " + iaEx);
+                } finally {
+                    if (line != null && !opened) {
+                        line.close();
+                    }
+                }
             }
-           float  v1 = jsVolume.getValue();
-           volume = v1/100;
-            FloatControl volCtrl = (FloatControl)line.getControl(FloatControl.Type.VOLUME);
-            if(mixer.isLineSupported(Port.Info.SPEAKER)){
-            volCtrl.setValue(volume);
-            }
-            System.out.println("    volCtrl.getValue() = " + volCtrl.getValue());  
-        }  
-        catch (LineUnavailableException e)  
-        {  
-            e.printStackTrace();  
-        }  
-        catch (IllegalArgumentException iaEx)  
-        {  
-            System.out.println("    " + iaEx);  
-        }  
-        finally  
-        {  
-            if (line != null && !opened)  
-            {  
-                line.close();  
-            }  
-        }  
-    }  
-} 
+        }
         System.out.println("var" + volume);
-        System.out.println("Volume atual: " + jsVolume.getValue()/100);
+        System.out.println("Volume atual: " + jsVolume.getValue() / 100);
     }//GEN-LAST:event_jsVolumeStateChanged
 
     private void jsVolumeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jsVolumeMouseReleased
@@ -221,10 +215,10 @@ for (Mixer.Info mixerInfo : mixers)
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try{
+        try {
             UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
-        }catch(Exception e){
-            
+        } catch (Exception e) {
+
         }
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -257,6 +251,7 @@ for (Mixer.Info mixerInfo : mixers)
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbPlayPause;
+    private javax.swing.JLabel jlGif;
     private javax.swing.JSlider jsVolume;
     // End of variables declaration//GEN-END:variables
 }
