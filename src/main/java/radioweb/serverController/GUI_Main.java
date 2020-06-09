@@ -85,7 +85,8 @@ public class GUI_Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jbPacienteMouseClicked
 
     private void jbPlaylistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbPlaylistMouseClicked
-        // TODO add your handling code here:
+        new GUI_Playlist().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jbPlaylistMouseClicked
 
     /**
