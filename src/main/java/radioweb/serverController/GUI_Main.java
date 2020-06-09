@@ -2,11 +2,6 @@ package radioweb.serverController;
 
 public class GUI_Main extends javax.swing.JFrame {
 
-    /*
-    O sistema é dividido em duas partes: Paciente e Formulário;
-    Paciente: é onde o usuário cadastra o paciente, informando um nome de data de nascimento;
-    Formulário: é onde o usuário vai poder fazer o teste da escala de morse;
-    */
     public GUI_Main() {
         initComponents();
         this.setLocationRelativeTo(null); //coloca o frame centralizado na tela

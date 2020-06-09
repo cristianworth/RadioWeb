@@ -24,7 +24,6 @@ public class GUI_Musica extends javax.swing.JFrame {
 
     public GUI_Musica() {
         initComponents();
-        //jtTabela.getColumnModel().removeColumn(jtTabela.getColumnModel().getColumn(0));
         this.setLocationRelativeTo(null); //coloca o frame centralizado na tela
 
         try {
@@ -41,7 +40,13 @@ public class GUI_Musica extends javax.swing.JFrame {
         });
         
         Listar();
+        //jtTabela.getColumnModel().removeColumn(jtTabela.getColumnModel().getColumn(0));
     }
+    
+    public void LimpaCampo(){
+        jtfNome.setText("");
+    }
+    
     
     public boolean LinhaValida() {
         int row = jtTabela.getSelectedRow();
@@ -88,6 +93,7 @@ public class GUI_Musica extends javax.swing.JFrame {
             int resp = st.executeUpdate(sql);
             if (resp == 1) {
                 Listar();
+                LimpaCampo();
             }
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Informações não alteradas!! " + s.toString());
@@ -103,6 +109,7 @@ public class GUI_Musica extends javax.swing.JFrame {
             int resp = st.executeUpdate(sql);
             if (resp == 1) {
                 Listar();
+                LimpaCampo();
             }
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Informações não incluida!! " + s.toString());
@@ -116,6 +123,7 @@ public class GUI_Musica extends javax.swing.JFrame {
             int resp = st.executeUpdate(sql);
             if (resp == 1) {
                 Listar();
+                LimpaCampo();
             }
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Informações não excluidas!! " + s.toString());
@@ -142,8 +150,8 @@ public class GUI_Musica extends javax.swing.JFrame {
         jtfNome = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Lista Paciente");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Musica");
         setResizable(false);
 
         jbListar.setText("Listar");
@@ -253,7 +261,9 @@ public class GUI_Musica extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
