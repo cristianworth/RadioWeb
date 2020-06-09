@@ -65,17 +65,18 @@ public class GUI_Musica extends javax.swing.JFrame {
     }
 
     private void Listar() {
-        String colunas[] = {"Cod", "Nome"};
+        String colunas[] = {"Código", "Música"};
         modelo = new DefaultTableModel(colunas, 0);
 
         try {
-            String sql = "SELECT id_musica, nome_musica FROM Musica ";
+            String sql = "SELECT id_musica, nome_musica FROM Musica";
             ResultSet rec = st.executeQuery(sql);
             while (rec.next()) {
                 String codigo = rec.getString("id_musica");
                 String nome = rec.getString("nome_musica");
 
                 modelo.addRow(new Object[]{codigo, nome});
+                LimpaCampo();
             }
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Erro ao listar!! " + s.toString());
@@ -93,7 +94,6 @@ public class GUI_Musica extends javax.swing.JFrame {
             int resp = st.executeUpdate(sql);
             if (resp == 1) {
                 Listar();
-                LimpaCampo();
             }
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Informações não alteradas!! " + s.toString());
@@ -109,7 +109,6 @@ public class GUI_Musica extends javax.swing.JFrame {
             int resp = st.executeUpdate(sql);
             if (resp == 1) {
                 Listar();
-                LimpaCampo();
             }
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Informações não incluida!! " + s.toString());
@@ -123,7 +122,6 @@ public class GUI_Musica extends javax.swing.JFrame {
             int resp = st.executeUpdate(sql);
             if (resp == 1) {
                 Listar();
-                LimpaCampo();
             }
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Informações não excluidas!! " + s.toString());
@@ -169,10 +167,13 @@ public class GUI_Musica extends javax.swing.JFrame {
                 {null, null}
             },
             new String [] {
-                "Cod", "Musica"
+                "Código", "Música"
             }
         ));
         jScrollPane2.setViewportView(jtTabela);
+        if (jtTabela.getColumnModel().getColumnCount() > 0) {
+            jtTabela.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         jbIncluir.setText("Incluir");
         jbIncluir.addMouseListener(new java.awt.event.MouseAdapter() {
