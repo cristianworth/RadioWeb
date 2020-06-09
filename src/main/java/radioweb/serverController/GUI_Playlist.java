@@ -6,10 +6,14 @@
 
 package radioweb.serverController;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,6 +21,7 @@ import java.util.logging.Logger;
  */
 public class GUI_Playlist extends javax.swing.JFrame {
     Statement st;
+    private DefaultListModel lista;
     /** Creates new form GUI_Playlist */
     public GUI_Playlist() {
         initComponents();
@@ -26,6 +31,23 @@ public class GUI_Playlist extends javax.swing.JFrame {
             Logger.getLogger(GUI_Musica.class.getName()).log(Level.SEVERE, null, e); //log de erro
             System.out.println("Error: " + e.toString() + e.getMessage());
         }
+    }
+    public void ListarPL(){
+        lista = new DefaultListModel();
+        jListPlaylist.setModel(lista);
+        try {
+            String sql = "SELECT  nome_playlist FROM Playlist";
+            ResultSet rec = st.executeQuery(sql);
+            while (rec.next()) {
+                String nome = rec.getString("nome_playlist");
+                lista.addElement(nome);
+
+            }
+        } catch (SQLException s) {
+            JOptionPane.showMessageDialog(this, "Erro ao listar!! " + s.toString());
+        }
+
+    
     }
 
     /** This method is called from within the constructor to
@@ -38,14 +60,14 @@ public class GUI_Playlist extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jListPLMusic = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        jListAllMusic = new javax.swing.JList<>();
         jButtonAddPlaylist = new javax.swing.JButton();
         jButtonCriarPlaylist = new javax.swing.JButton();
         jTextFieldNomePlaylist = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList3 = new javax.swing.JList<>();
+        jListPlaylist = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -55,9 +77,9 @@ public class GUI_Playlist extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jListPLMusic);
 
-        jScrollPane2.setViewportView(jList2);
+        jScrollPane2.setViewportView(jListAllMusic);
 
         jButtonAddPlaylist.setText("Adicionar a playlist");
 
@@ -68,7 +90,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane3.setViewportView(jList3);
+        jScrollPane3.setViewportView(jListPlaylist);
 
         jLabel1.setText("Playlists");
 
@@ -77,6 +99,11 @@ public class GUI_Playlist extends javax.swing.JFrame {
         jLabel3.setText("Todas músicas disponíveis");
 
         jButtonListarPlaylist.setText("Listar");
+        jButtonListarPlaylist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonListarPlaylistActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("CRIAR NOVA PLAYLIST");
 
@@ -172,8 +199,12 @@ public class GUI_Playlist extends javax.swing.JFrame {
           catch(Exception ex){
             System.out.println(ex);
     }
-        jTextFieldNomePlaylist.getText();
+       ListarPL();
     }//GEN-LAST:event_jButtonCriarPlaylistActionPerformed
+
+    private void jButtonListarPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListarPlaylistActionPerformed
+    ListarPL();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonListarPlaylistActionPerformed
 
     /**
      * @param args the command line arguments
@@ -219,9 +250,9 @@ public class GUI_Playlist extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
-    private javax.swing.JList<String> jList3;
+    private javax.swing.JList<String> jListAllMusic;
+    private javax.swing.JList<String> jListPLMusic;
+    private javax.swing.JList<String> jListPlaylist;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
