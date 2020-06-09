@@ -148,11 +148,9 @@ public class GUIClient extends javax.swing.JFrame {
             isSelected = false;
             jbPlayPause.setText("STOP ⏹");
             try {
-                //https://gamepedia.cursecdn.com/dota2_gamepedia/f/fb/Vo_nyx_assassin_nyx_laugh_06.mp3
-                pc = new PlayerController("https://gamepedia.cursecdn.com/dota2_gamepedia/f/fb/Vo_nyx_assassin_nyx_laugh_06.mp3", false);
+                pc = new PlayerController();
                 pc.start();
             } catch (NullPointerException ex) {
-
             }
         } else {
             pc.close();
