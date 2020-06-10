@@ -1,5 +1,10 @@
 package radioweb.serverController;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,9 +13,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -18,12 +25,13 @@ public class GUI_Musica extends javax.swing.JFrame {
 
     Statement st;
     DefaultTableModel modelo;
-    
-    private int Codigo = 0;
+
     private String Nome = "";
+    private String Caminho = "";
 
     public GUI_Musica() {
         initComponents();
+        jlCaminho.setText("");
         this.setLocationRelativeTo(null); //coloca o frame centralizado na tela
 
         try {
@@ -35,19 +43,23 @@ public class GUI_Musica extends javax.swing.JFrame {
 
         jtTabela.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jtfNome.setText(jtTabela.getValueAt(jtTabela.getSelectedRow(), 1).toString());
+                jtfNome.setText(jtTabela.getValueAt(jtTabela.getSelectedRow(), 0).toString());
+                try {
+                    SetarCaminho(Decodifica(jtTabela.getModel().getValueAt(jtTabela.getSelectedRow(), 2).toString()));
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(GUI_Musica.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
-        
+
         Listar();
-        //jtTabela.getColumnModel().removeColumn(jtTabela.getColumnModel().getColumn(0));
     }
-    
-    public void LimpaCampo(){
+
+    public void LimpaCampo() {
         jtfNome.setText("");
+        jlCaminho.setText("");
     }
-    
-    
+
     public boolean LinhaValida() {
         int row = jtTabela.getSelectedRow();
         if (row >= 0) { //zero é a primeira coluna
@@ -59,34 +71,46 @@ public class GUI_Musica extends javax.swing.JFrame {
 
     public int BuscaCodigoSelecionado() {
         int row = jtTabela.getSelectedRow();
-        int column = 0; //coluna do codigo
-        int codigoSelecionado = Integer.valueOf(jtTabela.getValueAt(row, column).toString());
+        int column = 1; //coluna do codigo
+        int codigoSelecionado = Integer.valueOf(jtTabela.getModel().getValueAt(row, column).toString());
+        System.out.println("codigoselecionado");
         return codigoSelecionado;
     }
 
     private void Listar() {
-        String colunas[] = {"Código", "Música"};
+        String colunas[] = {"Música", "Código", "Caminho"};
         modelo = new DefaultTableModel(colunas, 0);
 
         try {
-            String sql = "SELECT id_musica, nome_musica FROM Musica";
+            String sql = "SELECT id_musica, nome_musica, caminho_musica FROM Musica";
             ResultSet rec = st.executeQuery(sql);
             while (rec.next()) {
-                String codigo = rec.getString("id_musica");
                 String nome = rec.getString("nome_musica");
+                String codigo = rec.getString("id_musica");
+                String caminho = rec.getString("caminho_musica");
 
-                modelo.addRow(new Object[]{codigo, nome});
+                modelo.addRow(new Object[]{nome, codigo, caminho});
                 LimpaCampo();
             }
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Erro ao listar!! " + s.toString());
         }
         jtTabela.setModel(modelo);
+        jtTabela.getColumnModel().removeColumn(jtTabela.getColumnModel().getColumn(1)); //remove codigo
+        jtTabela.getColumnModel().removeColumn(jtTabela.getColumnModel().getColumn(1)); //remove caminho
     }
 
     public void Alterar() {
         Nome = jtfNome.getText();
-        String set = " SET nome_musica='" + Nome + "'";
+        //Caminho = Caminho.replaceAll("%5C", "\\\\");
+        try {
+            Caminho = URLEncoder.encode(Caminho, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(GUI_Musica.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        System.out.println("Camminho alterar" + Caminho);
+        String set = " SET nome_musica='" + Nome + "', caminho_musica='" + Caminho + "'";
         String where = " WHERE id_musica=" + BuscaCodigoSelecionado();
         String sql = "UPDATE Musica" + set + where;
 
@@ -102,8 +126,14 @@ public class GUI_Musica extends javax.swing.JFrame {
 
     public void Incluir() {
         Nome = jtfNome.getText();
-        String values = "'" + Nome + "'";
-        String sql = "INSERT INTO Musica (nome_musica) VALUES(" + values + ")";
+        Caminho = jlCaminho.getText();
+        try {
+            Caminho = URLEncoder.encode(Caminho, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(GUI_Musica.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String values = "'" + Nome + "', '" + Caminho + "'";
+        String sql = "INSERT INTO Musica (nome_musica, caminho_musica) VALUES(" + values + ")";
 
         try {
             int resp = st.executeUpdate(sql);
@@ -128,6 +158,20 @@ public class GUI_Musica extends javax.swing.JFrame {
         }
     }
 
+    public String Decodifica (String caminho) throws UnsupportedEncodingException {
+        try {
+            caminho = URLDecoder.decode(caminho, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(GUI_Musica.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return caminho;
+    }
+    
+    public void SetarCaminho(String caminho) {
+        Caminho = caminho;
+        jlCaminho.setText(caminho);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -147,6 +191,8 @@ public class GUI_Musica extends javax.swing.JFrame {
         jbMenu = new javax.swing.JButton();
         jtfNome = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jbArquivo = new javax.swing.JButton();
+        jlCaminho = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Musica");
@@ -161,18 +207,18 @@ public class GUI_Musica extends javax.swing.JFrame {
 
         jtTabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Código", "Música"
+                "Música", "Código", "Caminho"
             }
         ));
         jScrollPane2.setViewportView(jtTabela);
         if (jtTabela.getColumnModel().getColumnCount() > 0) {
-            jtTabela.getColumnModel().getColumn(0).setResizable(false);
+            jtTabela.getColumnModel().getColumn(1).setResizable(false);
         }
 
         jbIncluir.setText("Incluir");
@@ -205,6 +251,16 @@ public class GUI_Musica extends javax.swing.JFrame {
 
         jLabel2.setText("Música:");
 
+        jbArquivo.setText("Arquivo");
+        jbArquivo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jbArquivoMouseClicked(evt);
+            }
+        });
+
+        jlCaminho.setText("Caminho");
+        jlCaminho.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -226,12 +282,16 @@ public class GUI_Musica extends javax.swing.JFrame {
                                 .addComponent(jbExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jbListar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtfNome)))
-                        .addContainerGap())))
+                                .addComponent(jbListar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlCaminho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jtfNome))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbArquivo))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,7 +303,10 @@ public class GUI_Musica extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbArquivo)
                     .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlCaminho)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jbExcluir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -300,15 +363,28 @@ public class GUI_Musica extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jbMenuMouseClicked
 
+    private void jbArquivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbArquivoMouseClicked
+        JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+        int returnValue = jfc.showOpenDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = jfc.getSelectedFile();
+            SetarCaminho(selectedFile.getAbsolutePath());
+        }
+    }//GEN-LAST:event_jbArquivoMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbAlterar;
+    private javax.swing.JButton jbArquivo;
     private javax.swing.JButton jbExcluir;
     private javax.swing.JButton jbIncluir;
     private javax.swing.JButton jbListar;
     private javax.swing.JButton jbMenu;
+    private javax.swing.JLabel jlCaminho;
     private javax.swing.JTable jtTabela;
     private javax.swing.JTextField jtfNome;
     // End of variables declaration//GEN-END:variables
