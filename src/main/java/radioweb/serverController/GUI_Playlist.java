@@ -9,6 +9,7 @@ package radioweb.serverController;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -21,14 +22,14 @@ import javax.swing.table.DefaultTableModel;
  */
 public class GUI_Playlist extends javax.swing.JFrame {
     Statement st;
-    private DefaultListModel lista;
+    private DefaultListModel lista, lista2, lista3;
     /** Creates new form GUI_Playlist */
     public GUI_Playlist() {
         initComponents();
         try {
             st = new DBConexao().getConnection(); //faz a conexão com o banco de dados
         } catch (Exception e) {
-            Logger.getLogger(GUI_Musica.class.getName()).log(Level.SEVERE, null, e); //log de erro
+            Logger.getLogger(GUI_Playlist.class.getName()).log(Level.SEVERE, null, e); //log de erro
             System.out.println("Error: " + e.toString() + e.getMessage());
         }
     }
@@ -36,9 +37,10 @@ public class GUI_Playlist extends javax.swing.JFrame {
         lista = new DefaultListModel();
         jListPlaylist.setModel(lista);
         try {
-            String sql = "SELECT  nome_playlist FROM Playlist";
+            String sql = "SELECT id_playlist, nome_playlist FROM Playlist";
             ResultSet rec = st.executeQuery(sql);
             while (rec.next()) {
+                String cod = rec.getString("id_playlist");
                 String nome = rec.getString("nome_playlist");
                 lista.addElement(nome);
 
@@ -47,6 +49,25 @@ public class GUI_Playlist extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao listar!! " + s.toString());
         }
 
+    
+    }
+    
+    public void ListarTodasMusicas(){
+        lista3 = new DefaultListModel();
+        jListAllMusic.setModel(lista3);
+        try {
+            String sql = "SELECT id_musica, nome_musica FROM Musica";
+            ResultSet rec = st.executeQuery(sql);
+            while (rec.next()) {
+                String cod = rec.getString("id_musica");
+                String nome = rec.getString("nome_musica");
+                lista3.addElement(nome);
+            }
+        } catch (SQLException s) {
+            JOptionPane.showMessageDialog(this, "Erro ao listar!! " + s.toString());
+        }
+
+    
     
     }
 
@@ -74,6 +95,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
         jButtonListarPlaylist = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jButtonVoltar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -108,6 +130,13 @@ public class GUI_Playlist extends javax.swing.JFrame {
         jLabel4.setText("CRIAR NOVA PLAYLIST");
 
         jButtonVoltar.setText("< < < Voltar");
+        jButtonVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVoltarActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Remover da Playlist");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,22 +163,29 @@ public class GUI_Playlist extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonVoltar))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                        .addGap(55, 55, 55)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(44, 44, 44)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(44, 44, 44)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jButton1)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(34, 34, 34))
         );
         layout.setVerticalGroup(
@@ -170,7 +206,8 @@ public class GUI_Playlist extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAddPlaylist)
-                    .addComponent(jButtonListarPlaylist))
+                    .addComponent(jButtonListarPlaylist)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -203,8 +240,14 @@ public class GUI_Playlist extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCriarPlaylistActionPerformed
 
     private void jButtonListarPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListarPlaylistActionPerformed
-    ListarPL();        // TODO add your handling code here:
+    ListarPL();
+    ListarTodasMusicas();// TODO add your handling code here:
     }//GEN-LAST:event_jButtonListarPlaylistActionPerformed
+
+    private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
+       new GUI_Main().setVisible(true);
+        this.dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonVoltarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -242,6 +285,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAddPlaylist;
     private javax.swing.JButton jButtonCriarPlaylist;
     private javax.swing.JButton jButtonListarPlaylist;
