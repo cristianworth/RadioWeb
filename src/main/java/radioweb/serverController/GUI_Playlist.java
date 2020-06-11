@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package radioweb.serverController;
 
 import java.sql.ResultSet;
@@ -15,10 +10,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author gusta
- */
 public class GUI_Playlist extends javax.swing.JFrame {
     
     private Statement st;
@@ -26,6 +17,8 @@ public class GUI_Playlist extends javax.swing.JFrame {
     
     public GUI_Playlist() {
         initComponents();
+        this.setLocationRelativeTo(null); //coloca o frame centralizado na tela
+        
         try {
             st = new DBConexao().getConnection(); //faz a conexão com o banco de dados
         } catch (Exception e) {
@@ -58,7 +51,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
     }
     
     public void ListarPlaylist() {
-        String colunas[] = {"Playlist", "Código"};
+        String colunas[] = {"Playlists", "Código"};
         tabelaPlaylist = new DefaultTableModel(colunas, 0);
         try {
             String sql = "SELECT id_playlist, nome_playlist FROM Playlist";
@@ -204,7 +197,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
                 {null}
             },
             new String [] {
-                "Playlist"
+                "Playlists"
             }
         ));
         jScrollPane5.setViewportView(jtPlaylist);
@@ -217,7 +210,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
                 {null}
             },
             new String [] {
-                "Música da Playlist"
+                "Músicas da Playlist"
             }
         ));
         jScrollPane6.setViewportView(jtMusica_Playlist);
