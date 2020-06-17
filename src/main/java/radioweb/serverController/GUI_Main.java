@@ -20,9 +20,10 @@ public class GUI_Main extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jbPlaylist = new javax.swing.JButton();
+        jbReproduzir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Escala de Morse");
+        setTitle("Rádio Web");
 
         jbPaciente.setText("Música");
         jbPaciente.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -37,6 +38,13 @@ public class GUI_Main extends javax.swing.JFrame {
         jbPlaylist.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jbPlaylistMouseClicked(evt);
+            }
+        });
+
+        jbReproduzir.setText("Reproduzir ▶");
+        jbReproduzir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jbReproduzirMouseClicked(evt);
             }
         });
 
@@ -55,10 +63,12 @@ public class GUI_Main extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(40, 40, 40)
                 .addComponent(jbPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addGap(18, 18, 18)
                 .addComponent(jbPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jbReproduzir)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -71,7 +81,8 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jbPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbReproduzir, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
 
@@ -85,8 +96,16 @@ public class GUI_Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jbPacienteMouseClicked
 
     private void jbPlaylistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbPlaylistMouseClicked
-        // TODO add your handling code here:
+        //Vai chamar a tela de playlist
+        new GUI_Playlist().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jbPlaylistMouseClicked
+
+    private void jbReproduzirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbReproduzirMouseClicked
+        //Vai chamar a tela de reproduzir playlist
+        new GUI_Reproduzir().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jbReproduzirMouseClicked
 
     /**
      * @param args the command line arguments
@@ -128,5 +147,6 @@ public class GUI_Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JButton jbPaciente;
     private javax.swing.JButton jbPlaylist;
+    private javax.swing.JButton jbReproduzir;
     // End of variables declaration//GEN-END:variables
 }
