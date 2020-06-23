@@ -38,7 +38,7 @@ public class MusicProtocol {
     }
 
     public String getJson() throws IOException {
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        ObjectWriter ow = new ObjectMapper().writer();
         String JsonProcoloMusica = ow.writeValueAsString(this);
         return JsonProcoloMusica;
     }
