@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -90,6 +91,11 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
                 jbPlayPlaylistMouseClicked(evt);
             }
         });
+        jbPlayPlaylist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbPlayPlaylistActionPerformed(evt);
+            }
+        });
 
         jbMenu.setText("<<< Voltar");
         jbMenu.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -126,8 +132,8 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbPlayPlaylistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbPlayPlaylistMouseClicked
-        String codigoPlaylist = jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString();
-        BuscaCaminhoDasMusicas(codigoPlaylist);
+        //String codigoPlaylist = jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString();
+        //BuscaCaminhoDasMusicas(codigoPlaylist);
     }//GEN-LAST:event_jbPlayPlaylistMouseClicked
 
     private void jbMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbMenuMouseClicked
@@ -136,24 +142,34 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jbMenuMouseClicked
 
+    private void jbPlayPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPlayPlaylistActionPerformed
+        // TODO add your handling code here:
+        String codigoPlaylist = jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString();
+        BuscaCaminhoDasMusicas(codigoPlaylist);
+    }//GEN-LAST:event_jbPlayPlaylistActionPerformed
+
     public void BuscaCaminhoDasMusicas(String codigoPlaylist) {
         try {
+            ArrayList<String> caminho = new ArrayList<String>();
             String sql = "SELECT Musica.id_musica, Musica.nome_musica, Musica.caminho_musica from MusicaPlaylist\n"
                     + "LEFT JOIN Musica on (Musica.id_musica = MusicaPlaylist.id_musica)\n"
                     + "WHERE id_playlist = " + codigoPlaylist
                     + " ORDER BY id_musica_playlist";
             ResultSet rec = st.executeQuery(sql);
             while (rec.next()) {
-                String caminho = rec.getString("caminho_musica");
                 try {
-                    caminho = Decodifica(caminho);
-                    //FazAlgoNaControllerDoMarcelo(caminho);
+                    caminho.add(Decodifica(rec.getString("caminho_musica")));                    
                 } catch (UnsupportedEncodingException ex) {
                     Logger.getLogger(GUI_Reproduzir.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+
+          SenderController thread =  new SenderController(caminho);
+          thread.start();
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Erro ao listar!! " + s.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(GUI_Reproduzir.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

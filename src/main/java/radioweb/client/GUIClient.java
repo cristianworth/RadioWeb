@@ -1,6 +1,7 @@
 package radioweb.client;
 
 import java.awt.Image;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -155,10 +156,13 @@ public class GUIClient extends javax.swing.JFrame {
             } catch (NullPointerException ex) {
             }
         } else {
-            pc.close();
+            try {
+                pc.close();
+            } catch (IOException ex) {
+                Logger.getLogger(GUIClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
             isSelected = true;
             jbPlayPause.setText("PLAY ▶");
-
         }
     }//GEN-LAST:event_jbPlayPauseMouseClicked
 
