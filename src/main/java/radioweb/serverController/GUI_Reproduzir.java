@@ -34,7 +34,10 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
         }
         Listar();
     }
-
+    /**
+     * Metodo Listar
+     * Lista as playlists em tela
+     */
     public void Listar() {
         String colunas[] = {"Playlists", "Código"};
         tabelaPlaylist = new DefaultTableModel(colunas, 0);
@@ -130,24 +133,40 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+     /**
+     * Metodo jbPlayPlaylistMouseClicked
+     * @deprecated
+     * @param evt recebe o MouseEvent
+     */
     private void jbPlayPlaylistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbPlayPlaylistMouseClicked
         //String codigoPlaylist = jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString();
         //BuscaCaminhoDasMusicas(codigoPlaylist);
     }//GEN-LAST:event_jbPlayPlaylistMouseClicked
-
+    /**
+     * Metodo jbMenuMouseClicked
+     * retorna para a tla anterior
+     * @param evt recebe o MouseEvent
+     */
     private void jbMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbMenuMouseClicked
         //volta para o menu principal
         new GUI_Main().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jbMenuMouseClicked
-
+    /**
+     * Metodo jbPlayPlaylistActionPerformed
+     * chama o metodo que busca as musicas no banco
+     * @param evt recebe o ActionEvent
+     */
     private void jbPlayPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPlayPlaylistActionPerformed
         // TODO add your handling code here:
         String codigoPlaylist = jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString();
         BuscaCaminhoDasMusicas(codigoPlaylist);
     }//GEN-LAST:event_jbPlayPlaylistActionPerformed
-
+    /**
+     * Metodo BuscaCaminhoDasMusicas
+     * busca as musicas no banco e manda para o SenderController
+     * @param codigoPlaylist recebe o codigo da playlist para buscar no banco
+     */
     public void BuscaCaminhoDasMusicas(String codigoPlaylist) {
         try {
             ArrayList<String> caminho = new ArrayList<String>();
@@ -172,7 +191,12 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
             Logger.getLogger(GUI_Reproduzir.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /**
+     * Metodo Decodifica
+     * decodifica url's
+     * @param caminho recebe a url em URI
+     * @return String
+     */
     public String Decodifica(String caminho) throws UnsupportedEncodingException {
         try {
             caminho = URLDecoder.decode(caminho, StandardCharsets.UTF_8.toString());

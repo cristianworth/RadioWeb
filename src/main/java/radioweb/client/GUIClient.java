@@ -36,7 +36,11 @@ public class GUIClient extends javax.swing.JFrame {
             Logger.getLogger(GUIClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /**
+     * Metodo mostraGif
+     * exibe o gif do "AlienPls" (o alien dançandinho)
+     * @exception MalformedURLException
+     */
     private void mostraGif() throws MalformedURLException {
         URL url = new URL("https://cdn.betterttv.net/emote/5805580c3d506fea7ee357d6/3x");
         ImageIcon image = new javax.swing.ImageIcon(url);
@@ -165,7 +169,11 @@ public class GUIClient extends javax.swing.JFrame {
             jbPlayPause.setText("PLAY ▶");
         }
     }//GEN-LAST:event_jbPlayPauseMouseClicked
-
+    /**
+     * Metodo jsVolumeStateChanged
+     * ajusta o volume do mixer
+     * @param evt evento ChangeEvent
+     */
     private void jsVolumeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jsVolumeStateChanged
         Mixer.Info[] mixers = AudioSystem.getMixerInfo();
         System.out.println("There are " + mixers.length + " mixer info objects");

@@ -54,12 +54,19 @@ public class GUI_Musica extends javax.swing.JFrame {
 
         Listar();
     }
-
+    /**
+     * Metodo LimpaCampo
+     * limpa os campos de nome e caminho
+     */
     public void LimpaCampo() {
         jtfNome.setText("");
         jlCaminho.setText("");
     }
-
+    /**
+     * Metodo LinhaValida
+     * [ não sei qual a finalidade disso alguem anota aqui ]
+     * @return boolean
+     */
     public boolean LinhaValida() {
         int row = jtTabela.getSelectedRow();
         if (row >= 0) { //zero é a primeira coluna
@@ -68,7 +75,11 @@ public class GUI_Musica extends javax.swing.JFrame {
             return false;
         }
     }
-
+    /**
+     * Metodo BuscaCodigoSelecionado
+     * busca o codigo da linha selecionada
+     * @return int
+     */
     public int BuscaCodigoSelecionado() {
         int row = jtTabela.getSelectedRow();
         int column = 1; //coluna do codigo
@@ -76,7 +87,10 @@ public class GUI_Musica extends javax.swing.JFrame {
         System.out.println("codigoselecionado");
         return codigoSelecionado;
     }
-
+    /**
+     * Metodo Listar
+     * Lista na tabela
+     */
     private void Listar() {
         String colunas[] = {"Música", "Código", "Caminho"};
         modelo = new DefaultTableModel(colunas, 0);
@@ -99,7 +113,10 @@ public class GUI_Musica extends javax.swing.JFrame {
         jtTabela.getColumnModel().removeColumn(jtTabela.getColumnModel().getColumn(1)); //remove codigo
         jtTabela.getColumnModel().removeColumn(jtTabela.getColumnModel().getColumn(1)); //remove caminho
     }
-
+   /**
+     * Metodo Alterar
+     * Altera o valor no banco
+     */
     public void Alterar() {
         Nome = jtfNome.getText();
         //Caminho = Caminho.replaceAll("%5C", "\\\\");
@@ -123,7 +140,10 @@ public class GUI_Musica extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Informações não alteradas!! " + s.toString());
         }
     }
-
+   /**
+     * Metodo Incluir
+     * Inclui o valor no banco
+     */
     public void Incluir() {
         Nome = jtfNome.getText();
         Caminho = jlCaminho.getText();
@@ -144,7 +164,10 @@ public class GUI_Musica extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Informações não incluida!! " + s.toString());
         }
     }
-
+   /**
+     * Metodo Excluir
+     * Exclui o valor no banco
+     */
     public void Excluir() {
         String sql = "DELETE FROM Musica WHERE id_musica=" + BuscaCodigoSelecionado();
 
@@ -157,7 +180,13 @@ public class GUI_Musica extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Informações não excluidas!! " + s.toString());
         }
     }
-
+   /**
+     * Metodo Decodifica
+     * decodifica uma URL em URI
+     * @param caminho string com o caminho em URI
+     * @return string
+     * @throws UnsupportedEncodingException
+     */
     public String Decodifica (String caminho) throws UnsupportedEncodingException {
         try {
             caminho = URLDecoder.decode(caminho, StandardCharsets.UTF_8.toString());
@@ -166,7 +195,11 @@ public class GUI_Musica extends javax.swing.JFrame {
         }
         return caminho;
     }
-    
+       /**
+     * Metodo SetarCaminho
+     * seta o label com o caminho
+     * @param caminho string caminho
+     */
     public void SetarCaminho(String caminho) {
         Caminho = caminho;
         jlCaminho.setText(caminho);
@@ -332,15 +365,30 @@ public class GUI_Musica extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+     /**
+     * Metodo jbListarMouseClicked
+     * chama o Listar
+     * @see #Listar()
+     * @param evt MouseEvent
+     */
     private void jbListarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbListarMouseClicked
         Listar();
     }//GEN-LAST:event_jbListarMouseClicked
-
+     /**
+     * Metodo jbIncluirMouseClicked
+     * chama o Incluir
+     * @see #Incluir()
+     * @param evt MouseEvent
+     */
     private void jbIncluirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbIncluirMouseClicked
         Incluir();
     }//GEN-LAST:event_jbIncluirMouseClicked
-
+     /**
+     * Metodo jbAlterarMouseClicked
+     * chama o Alterar
+     * @see #Alterar()
+     * @param evt MouseEvent
+     */
     private void jbAlterarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbAlterarMouseClicked
         if (LinhaValida()) {
             Alterar();
@@ -348,7 +396,12 @@ public class GUI_Musica extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecione um registro para Alterar");
         }
     }//GEN-LAST:event_jbAlterarMouseClicked
-
+     /**
+     * Metodo jbExcluirMouseClicked
+     * chama o Excluir
+     * @see #Excluir()
+     * @param evt MouseEvent
+     */
     private void jbExcluirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbExcluirMouseClicked
         if (LinhaValida()) {
             Excluir();
@@ -356,13 +409,21 @@ public class GUI_Musica extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecione um registro para Excluir");
         }
     }//GEN-LAST:event_jbExcluirMouseClicked
-
+     /**
+     * Metodo jbMenuMouseClicked
+     * retorna ao GUI_Main
+     * @see GUI_Main
+     * @param evt MouseEvent
+     */
     private void jbMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbMenuMouseClicked
         //volta para o menu principal
         new GUI_Main().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jbMenuMouseClicked
-
+     /**
+     * Metodo jbArquivoMouseClicked
+     * abre o file chooser
+     */
     private void jbArquivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbArquivoMouseClicked
         JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 

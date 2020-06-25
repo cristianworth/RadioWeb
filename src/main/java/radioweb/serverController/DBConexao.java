@@ -11,7 +11,12 @@ public class DBConexao {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String USUARIO = "aluno";
     private static final String SENHA = "aluno";
-    
+     /**
+     * Metodo getConnection
+     * cria conexcao com o banco mySql
+     * @return Statement
+     * @exception SQLException
+     */
     public Statement getConnection() throws SQLException {
         try {
             Class.forName( DRIVER );

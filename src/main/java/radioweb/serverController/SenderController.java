@@ -28,7 +28,12 @@ public class SenderController extends Thread {
         this.caminhos = caminhos;
 
     }
-
+    /**
+     * Metodo run
+     * abre o arquivo da musca, calcula a duração media em s
+     * manda as muscas para o servidor
+     * @see #getDurationWithMp3Spi(java.lang.String) 
+     */
     public void run() {
         try {
             try (Socket socket = new Socket("127.0.0.1", 6666)) {
@@ -53,7 +58,14 @@ public class SenderController extends Thread {
 
         }
     }
-
+    /**
+     * Metodo getDurationWithMp3Spi
+     * abre o arquivo da musca, calcula a duração media em s usando o framerate
+     * @param filename caminho do arquivo
+     * @return float
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     */
     private float getDurationWithMp3Spi(String filename) throws UnsupportedAudioFileException, IOException {
 
         Header h = null;

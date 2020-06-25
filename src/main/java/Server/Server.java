@@ -5,12 +5,8 @@
  */
 package Server;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 
 /**
  *
@@ -19,6 +15,8 @@ import java.util.ArrayList;
 public class Server {
     /**
      * @param args the command line arguments
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
      */
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
         new ServerThread().init();

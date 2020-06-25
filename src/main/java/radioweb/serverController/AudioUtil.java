@@ -12,6 +12,13 @@ package radioweb.serverController;
 import java.io.File;
 
 public class AudioUtil {
+     /**
+     * Metodo getSoundFile
+     * verifica se o arquivo existe
+     * @param fileName caminho do arquivo
+     * @return File
+     * @exception IllegalArgumentException
+     */
     public static File getSoundFile(String fileName) {
         File soundFile = new File(fileName);
         if (!soundFile.exists() || !soundFile.isFile())

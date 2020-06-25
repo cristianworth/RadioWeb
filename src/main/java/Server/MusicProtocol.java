@@ -13,6 +13,10 @@ import java.io.Serializable;
  *
  * @author Marcelo
  */
+   /**
+     * class MusicProtocol 
+     * Protocolo que é enviado ao servidor
+     */
 public class MusicProtocol implements Serializable  {
     
     private int index;
@@ -49,13 +53,24 @@ public class MusicProtocol implements Serializable  {
         this.duracao = duracao;
         this.playlistNome = playlistNome;
     }
-
+    /**
+     * Metodo transformaJson
+     * transforma um string json em um Objeto MusicProtocol
+     * @param json string json
+     * @return MusicProtocol
+     * @throws IOException
+     */
     public MusicProtocol getProtocolo(String json) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         MusicProtocol protocolo = mapper.readValue(json, MusicProtocol.class);  
         return protocolo;
     }
-
+    /**
+     * Metodo transformaJson
+     * transforma o objeto numa string Json
+     * @return String
+     * @throws IOException
+     */
     public String transformaJson() throws IOException {
         ObjectWriter ow = new ObjectMapper().writer();
         String JsonProcoloMusica = ow.writeValueAsString(this);

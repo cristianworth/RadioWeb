@@ -10,7 +10,10 @@ package Server;
  * @author Marcelo
  */
 import java.net.InetAddress;
-
+   /**
+     * class ServerClient 
+     * Clientes conectados no servidor
+     */
 public class ServerClient {
 
 	public String name;

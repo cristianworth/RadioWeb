@@ -11,14 +11,14 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class GUI_Playlist extends javax.swing.JFrame {
-    
+
     private Statement st;
     private DefaultTableModel tabelaPlaylist, tabelaMusica_Playlist, tabelaMusica;
-    
+
     public GUI_Playlist() {
         initComponents();
         this.setLocationRelativeTo(null); //coloca o frame centralizado na tela
-        
+
         try {
             st = new DBConexao().getConnection(); //faz a conexão com o banco de dados
         } catch (Exception e) {
@@ -28,12 +28,21 @@ public class GUI_Playlist extends javax.swing.JFrame {
         ListarInit();
         AddListenersTabela();
     }
-    
+
+    /**
+     * Metodo ListarInit 
+     * chama o ListarPlaylist
+     * limpa a lista
+     * @see #ListarPlaylist() 
+     */
     public void ListarInit() {
         ListarPlaylist();
         ListarMusica("");
     }
-    
+    /**
+     * Metodo AddListenersTabela 
+     * adiciona os listeners na tabela
+     */
     public void AddListenersTabela() {
         jtPlaylist.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -41,7 +50,10 @@ public class GUI_Playlist extends javax.swing.JFrame {
             }
         });
     }
-    
+    /**
+     * Metodo AtualizaMusicas 
+     * @param playlist 
+     */
     public void AtualizaMusicas(String playlist) {
         /*atualiza as musicas para:
             *saber quais já foram adicionadas na playlist;
@@ -49,7 +61,10 @@ public class GUI_Playlist extends javax.swing.JFrame {
         ListarMusica_Playlist(playlist);
         ListarMusica(playlist);
     }
-    
+    /**
+     * Metodo ListarPlaylist 
+     * busca e lista as playlists na tabela
+     */
     public void ListarPlaylist() {
         String colunas[] = {"Playlists", "Código"};
         tabelaPlaylist = new DefaultTableModel(colunas, 0);
@@ -59,7 +74,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
             while (rec.next()) {
                 String nome = rec.getString("nome_playlist");
                 String codigo = rec.getString("id_playlist");
-                
+
                 tabelaPlaylist.addRow(new Object[]{nome, codigo});
             }
         } catch (SQLException s) {
@@ -69,23 +84,26 @@ public class GUI_Playlist extends javax.swing.JFrame {
         jtPlaylist.getColumnModel().removeColumn(jtPlaylist.getColumnModel().getColumn(1)); //remove codigo
 
     }
-    
+    /**
+     * Metodo ListarMusica 
+     * busca e lista as musicas na tabela
+     */
     public void ListarMusica(String codigoPlaylist) {
         String colunas[] = {"Todas Músicas", "Código"};
         tabelaMusica = new DefaultTableModel(colunas, 0);
         try {
             String sql = "SELECT id_musica, nome_musica FROM Musica";
-            
+
             if (codigoPlaylist != "") {
                 String where = " WHERE Musica.id_musica NOT IN (SELECT id_musica FROM MusicaPlaylist WHERE id_playlist = " + codigoPlaylist + ")";
                 sql += where;
             }
-            
+
             ResultSet rec = st.executeQuery(sql);
             while (rec.next()) {
                 String nome = rec.getString("nome_musica");
                 String codigo = rec.getString("id_musica");
-                
+
                 tabelaMusica.addRow(new Object[]{nome, codigo});
             }
         } catch (SQLException s) {
@@ -94,7 +112,11 @@ public class GUI_Playlist extends javax.swing.JFrame {
         jtMusica.setModel(tabelaMusica);
         jtMusica.getColumnModel().removeColumn(jtMusica.getColumnModel().getColumn(1)); //remove codigo
     }
-    
+    /**
+     * Metodo ListarMusica_Playlist 
+     * busca as musicas da playlist
+     * @param codigoPlaylist codigo da playlist
+     */
     public void ListarMusica_Playlist(String codigoPlaylist) {
         String colunas[] = {"Músicas da Playlist", "Código"};
         tabelaMusica_Playlist = new DefaultTableModel(colunas, 0);
@@ -107,7 +129,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
             while (rec.next()) {
                 String nome = rec.getString("nome_musica");
                 String codigo = rec.getString("id_musica");
-                
+
                 tabelaMusica_Playlist.addRow(new Object[]{nome, codigo});
             }
         } catch (SQLException s) {
@@ -116,7 +138,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
         jtMusica_Playlist.setModel(tabelaMusica_Playlist);
         jtMusica_Playlist.getColumnModel().removeColumn(jtMusica_Playlist.getColumnModel().getColumn(1)); //remove codigo
     }
-    
+
     public void LimpaCampo() {
         jtfNomePlaylist.setText("");
     }
@@ -269,7 +291,11 @@ public class GUI_Playlist extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Metodo jbCriarPlaylistActionPerformed 
+     * cria a playlist no banco
+     * @param evt ActionEvent
+     */
     private void jbCriarPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCriarPlaylistActionPerformed
         //cria a playlist
         try {
@@ -283,13 +309,22 @@ public class GUI_Playlist extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Informações não incluida!! " + s.toString());
         }
     }//GEN-LAST:event_jbCriarPlaylistActionPerformed
-
+    /**
+     * Metodo jButtonVoltarActionPerformed 
+     * volta para o main
+     * @see GUI_Main
+     * @param evt ActionEvent
+     */
     private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
         //volta para o main
         new GUI_Main().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonVoltarActionPerformed
-
+    /**
+     * Metodo jbRemoveDaPlaylistActionPerformed 
+     * remove a musica da playlist
+     * @param evt ActionEvent
+     */
     private void jbRemoveDaPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbRemoveDaPlaylistActionPerformed
         try {
             String musica = jtMusica_Playlist.getModel().getValueAt(jtMusica_Playlist.getSelectedRow(), 1).toString();
@@ -303,7 +338,11 @@ public class GUI_Playlist extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Informações não incluida!! " + s.toString());
         }
     }//GEN-LAST:event_jbRemoveDaPlaylistActionPerformed
-
+    /**
+     * Metodo jbAdicionaNaPlaylistActionPerformed 
+     * adiciona a musica na playlist
+     * @param evt ActionEvent
+     */
     private void jbAdicionaNaPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdicionaNaPlaylistActionPerformed
         try {
             String musica = jtMusica.getModel().getValueAt(jtMusica.getSelectedRow(), 1).toString();

@@ -88,19 +88,31 @@ public class GUI_Main extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Metodo jbPacienteMouseClicked
+     * Abre a GUI_Musica
+     * @param evt MouseEvent
+     */
     private void jbPacienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbPacienteMouseClicked
         //Vai chamar a tela de musica
         new GUI_Musica().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jbPacienteMouseClicked
-
+    /**
+     * Metodo jbPlaylistMouseClicked
+     * Abre a GUI_Playlist
+     * @param evt MouseEvent
+     */
     private void jbPlaylistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbPlaylistMouseClicked
         //Vai chamar a tela de playlist
         new GUI_Playlist().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jbPlaylistMouseClicked
-
+    /**
+     * Metodo jbReproduzirMouseClicked
+     * Abre a GUI_Reproduzir
+     * @param evt MouseEvent
+     */
     private void jbReproduzirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbReproduzirMouseClicked
         //Vai chamar a tela de reproduzir playlist
         new GUI_Reproduzir().setVisible(true);
