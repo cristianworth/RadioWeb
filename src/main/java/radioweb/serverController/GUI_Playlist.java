@@ -385,7 +385,11 @@ public class GUI_Playlist extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecione uma Música e uma Playlist");
         }
     }//GEN-LAST:event_jbAdicionaNaPlaylistActionPerformed
-
+    /**
+     * Metodo jbExcluirPlaylistActionPerformed caso o usuario selecione um registro, excluir esse registro selecionado
+     *
+     * @param evt ActionEvent
+     */
     private void jbExcluirPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirPlaylistActionPerformed
         if (jtPlaylist.getSelectedRow() >= 0) { //se o usuario selecionou uma linha
             int codigoSelecionado = Integer.valueOf(jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString());
