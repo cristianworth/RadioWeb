@@ -1,5 +1,10 @@
 package radioweb.serverController;
 
+import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
+import java.util.Properties;
+import javax.swing.UIManager;
+import radioweb.client.GUIClient;
+
 public class GUI_Main extends javax.swing.JFrame {
 
     public GUI_Main() {
@@ -129,8 +134,17 @@ public class GUI_Main extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
+            Properties props = new Properties();
+            props.put("logoString", "Rádio Webson Controller");
+            HiFiLookAndFeel.setCurrentTheme(props);
+            UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(GUIClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        
+       try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

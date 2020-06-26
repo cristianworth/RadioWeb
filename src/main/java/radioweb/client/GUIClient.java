@@ -1,9 +1,11 @@
 package radioweb.client;
 
+import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 import java.awt.Image;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -33,7 +35,7 @@ public class GUIClient extends javax.swing.JFrame {
         initComponents();
         jsVolume.setMinimum(0);
         jsVolume.setMaximum(100);
-
+        this.setTitle("Rádio Webson");
         try {
             mostraGif();
         } catch (MalformedURLException ex) {
@@ -277,9 +279,12 @@ public class GUIClient extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
+            Properties props = new Properties();
+            props.put("logoString", "Rádio Webson");
+            HiFiLookAndFeel.setCurrentTheme(props);
             UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
-        } catch (Exception e) {
-
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(GUIClient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
