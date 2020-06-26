@@ -54,17 +54,18 @@ public class GUI_Musica extends javax.swing.JFrame {
 
         Listar();
     }
+
     /**
-     * Metodo LimpaCampo
-     * limpa os campos de nome e caminho
+     * Metodo LimpaCampo limpa os campos de nome e caminho
      */
     public void LimpaCampo() {
         jtfNome.setText("");
         jlCaminho.setText("");
     }
+
     /**
-     * Metodo LinhaValida
-     * Verifica se tem uma linha selecionada
+     * Metodo LinhaValida Verifica se tem uma linha selecionada
+     *
      * @return boolean
      */
     public boolean LinhaValida() {
@@ -75,9 +76,10 @@ public class GUI_Musica extends javax.swing.JFrame {
             return false;
         }
     }
+
     /**
-     * Metodo BuscaCodigoSelecionado
-     * busca o codigo da linha selecionada
+     * Metodo BuscaCodigoSelecionado busca o codigo da linha selecionada
+     *
      * @return int
      */
     public int BuscaCodigoSelecionado() {
@@ -87,9 +89,9 @@ public class GUI_Musica extends javax.swing.JFrame {
         System.out.println("codigoselecionado");
         return codigoSelecionado;
     }
+
     /**
-     * Metodo Listar
-     * Lista na tabela
+     * Metodo Listar Lista na tabela
      */
     private void Listar() {
         String colunas[] = {"Música", "Código", "Caminho"};
@@ -113,9 +115,9 @@ public class GUI_Musica extends javax.swing.JFrame {
         jtTabela.getColumnModel().removeColumn(jtTabela.getColumnModel().getColumn(1)); //remove codigo
         jtTabela.getColumnModel().removeColumn(jtTabela.getColumnModel().getColumn(1)); //remove caminho
     }
-   /**
-     * Metodo Alterar
-     * Altera o valor no banco
+
+    /**
+     * Metodo Alterar Altera o valor no banco
      */
     public void Alterar() {
         Nome = jtfNome.getText();
@@ -125,7 +127,7 @@ public class GUI_Musica extends javax.swing.JFrame {
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(GUI_Musica.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         System.out.println("Camminho alterar" + Caminho);
         String set = " SET nome_musica='" + Nome + "', caminho_musica='" + Caminho + "'";
         String where = " WHERE id_musica=" + BuscaCodigoSelecionado();
@@ -140,9 +142,9 @@ public class GUI_Musica extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Informações não alteradas!! " + s.toString());
         }
     }
-   /**
-     * Metodo Incluir
-     * Inclui o valor no banco
+
+    /**
+     * Metodo Incluir Inclui o valor no banco
      */
     public void Incluir() {
         Nome = jtfNome.getText();
@@ -164,9 +166,9 @@ public class GUI_Musica extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Informações não incluida!! " + s.toString());
         }
     }
-   /**
-     * Metodo Excluir
-     * Exclui o valor no banco
+
+    /**
+     * Metodo Excluir Exclui o valor no banco
      */
     public void Excluir() {
         String sql = "DELETE FROM Musica WHERE id_musica=" + BuscaCodigoSelecionado();
@@ -180,14 +182,15 @@ public class GUI_Musica extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Informações não excluidas!! " + s.toString());
         }
     }
-   /**
-     * Metodo Decodifica
-     * decodifica uma URL em URI
+
+    /**
+     * Metodo Decodifica decodifica uma URL em URI
+     *
      * @param caminho string com o caminho em URI
      * @return string
      * @throws UnsupportedEncodingException
      */
-    public String Decodifica (String caminho) throws UnsupportedEncodingException {
+    public String Decodifica(String caminho) throws UnsupportedEncodingException {
         try {
             caminho = URLDecoder.decode(caminho, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException ex) {
@@ -195,9 +198,10 @@ public class GUI_Musica extends javax.swing.JFrame {
         }
         return caminho;
     }
-       /**
-     * Metodo SetarCaminho
-     * seta o label com o caminho
+
+    /**
+     * Metodo SetarCaminho seta o label com o caminho
+     *
      * @param caminho string caminho
      */
     public void SetarCaminho(String caminho) {
@@ -370,39 +374,47 @@ public class GUI_Musica extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
      /**
-     * Metodo jbListarMouseClicked
-     * chama o Listar
+     * Metodo jbListarMouseClicked chama o Listar
+     *
      * @see #Listar()
      * @param evt MouseEvent
      */
     private void jbListarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbListarMouseClicked
         Listar();
     }//GEN-LAST:event_jbListarMouseClicked
-     /**
-     * Metodo jbIncluirMouseClicked
-     * chama o Incluir
+    /**
+     * Metodo jbIncluirMouseClicked chama o Incluir
+     *
      * @see #Incluir()
      * @param evt MouseEvent
      */
     private void jbIncluirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbIncluirMouseClicked
-        Incluir();
+        if (!jtfNome.getText().equals("")) {
+            Incluir();
+        } else {
+            JOptionPane.showMessageDialog(this, "Não é possível criar uma música sem um nome!!");
+        }
     }//GEN-LAST:event_jbIncluirMouseClicked
-     /**
-     * Metodo jbAlterarMouseClicked
-     * chama o Alterar
+    /**
+     * Metodo jbAlterarMouseClicked chama o Alterar
+     *
      * @see #Alterar()
      * @param evt MouseEvent
      */
     private void jbAlterarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbAlterarMouseClicked
         if (LinhaValida()) {
-            Alterar();
+            if (!jtfNome.getText().equals("")) {
+                Alterar();
+            } else {
+                JOptionPane.showMessageDialog(this, "Não é possível criar uma música sem um nome!!");
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um registro para Alterar");
         }
     }//GEN-LAST:event_jbAlterarMouseClicked
-     /**
-     * Metodo jbExcluirMouseClicked
-     * chama o Excluir
+    /**
+     * Metodo jbExcluirMouseClicked chama o Excluir
+     *
      * @see #Excluir()
      * @param evt MouseEvent
      */
@@ -413,9 +425,9 @@ public class GUI_Musica extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecione um registro para Excluir");
         }
     }//GEN-LAST:event_jbExcluirMouseClicked
-     /**
-     * Metodo jbMenuMouseClicked
-     * retorna ao GUI_Main
+    /**
+     * Metodo jbMenuMouseClicked retorna ao GUI_Main
+     *
      * @see GUI_Main
      * @param evt MouseEvent
      */
@@ -424,9 +436,8 @@ public class GUI_Musica extends javax.swing.JFrame {
         new GUI_Main().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jbMenuMouseClicked
-     /**
-     * Metodo jbArquivoMouseClicked
-     * abre o file chooser
+    /**
+     * Metodo jbArquivoMouseClicked abre o file chooser
      */
     private void jbArquivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbArquivoMouseClicked
         JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());

@@ -30,18 +30,17 @@ public class GUI_Playlist extends javax.swing.JFrame {
     }
 
     /**
-     * Metodo ListarInit 
-     * chama o ListarPlaylist
-     * limpa a lista
-     * @see #ListarPlaylist() 
+     * Metodo ListarInit chama o ListarPlaylist limpa a lista
+     *
+     * @see #ListarPlaylist()
      */
     public void ListarInit() {
         ListarPlaylist();
         ListarMusica("");
     }
+
     /**
-     * Metodo AddListenersTabela 
-     * adiciona os listeners na tabela
+     * Metodo AddListenersTabela adiciona os listeners na tabela
      */
     public void AddListenersTabela() {
         jtPlaylist.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -50,9 +49,11 @@ public class GUI_Playlist extends javax.swing.JFrame {
             }
         });
     }
+
     /**
-     * Metodo AtualizaMusicas 
-     * @param playlist 
+     * Metodo AtualizaMusicas
+     *
+     * @param playlist
      */
     public void AtualizaMusicas(String playlist) {
         /*atualiza as musicas para:
@@ -61,9 +62,9 @@ public class GUI_Playlist extends javax.swing.JFrame {
         ListarMusica_Playlist(playlist);
         ListarMusica(playlist);
     }
+
     /**
-     * Metodo ListarPlaylist 
-     * busca e lista as playlists na tabela
+     * Metodo ListarPlaylist busca e lista as playlists na tabela
      */
     public void ListarPlaylist() {
         String colunas[] = {"Playlists", "Código"};
@@ -84,9 +85,9 @@ public class GUI_Playlist extends javax.swing.JFrame {
         jtPlaylist.getColumnModel().removeColumn(jtPlaylist.getColumnModel().getColumn(1)); //remove codigo
 
     }
+
     /**
-     * Metodo ListarMusica 
-     * busca e lista as musicas na tabela
+     * Metodo ListarMusica busca e lista as musicas na tabela
      */
     public void ListarMusica(String codigoPlaylist) {
         String colunas[] = {"Todas Músicas", "Código"};
@@ -112,9 +113,10 @@ public class GUI_Playlist extends javax.swing.JFrame {
         jtMusica.setModel(tabelaMusica);
         jtMusica.getColumnModel().removeColumn(jtMusica.getColumnModel().getColumn(1)); //remove codigo
     }
+
     /**
-     * Metodo ListarMusica_Playlist 
-     * busca as musicas da playlist
+     * Metodo ListarMusica_Playlist busca as musicas da playlist
+     *
      * @param codigoPlaylist codigo da playlist
      */
     public void ListarMusica_Playlist(String codigoPlaylist) {
@@ -164,7 +166,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
         jtPlaylist = new javax.swing.JTable();
         jScrollPane6 = new javax.swing.JScrollPane();
         jtMusica_Playlist = new javax.swing.JTable();
-        jButtonExcluirPlaylist = new javax.swing.JButton();
+        jbExcluirPlaylist = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Playlist");
@@ -238,10 +240,10 @@ public class GUI_Playlist extends javax.swing.JFrame {
         ));
         jScrollPane6.setViewportView(jtMusica_Playlist);
 
-        jButtonExcluirPlaylist.setText("Excluir");
-        jButtonExcluirPlaylist.addActionListener(new java.awt.event.ActionListener() {
+        jbExcluirPlaylist.setText("Excluir");
+        jbExcluirPlaylist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonExcluirPlaylistActionPerformed(evt);
+                jbExcluirPlaylistActionPerformed(evt);
             }
         });
 
@@ -269,7 +271,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
                                 .addComponent(jButtonVoltar))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(85, 85, 85)
-                                .addComponent(jButtonExcluirPlaylist)))
+                                .addComponent(jbExcluirPlaylist)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -295,7 +297,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonExcluirPlaylist))
+                    .addComponent(jbExcluirPlaylist))
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtfNomePlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -307,26 +309,30 @@ public class GUI_Playlist extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     /**
-     * Metodo jbCriarPlaylistActionPerformed 
-     * cria a playlist no banco
+     * Metodo jbCriarPlaylistActionPerformed cria a playlist no banco
+     *
      * @param evt ActionEvent
      */
     private void jbCriarPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCriarPlaylistActionPerformed
         //cria a playlist
-        try {
-            String sql = "INSERT INTO Playlist (nome_playlist) VALUES('" + jtfNomePlaylist.getText() + "')";
-            int resp = st.executeUpdate(sql);
-            if (resp == 1) {
-                ListarPlaylist();
-                LimpaCampo();
+        if (!jtfNomePlaylist.getText().equals("")) {
+            try {
+                String sql = "INSERT INTO Playlist (nome_playlist) VALUES('" + jtfNomePlaylist.getText() + "')";
+                int resp = st.executeUpdate(sql);
+                if (resp == 1) {
+                    ListarPlaylist();
+                    LimpaCampo();
+                }
+            } catch (SQLException s) {
+                JOptionPane.showMessageDialog(this, "Informações não incluida!! " + s.toString());
             }
-        } catch (SQLException s) {
-            JOptionPane.showMessageDialog(this, "Informações não incluida!! " + s.toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "Não é possível criar uma playlist sem um nome!!");
         }
     }//GEN-LAST:event_jbCriarPlaylistActionPerformed
     /**
-     * Metodo jButtonVoltarActionPerformed 
-     * volta para o main
+     * Metodo jButtonVoltarActionPerformed volta para o main
+     *
      * @see GUI_Main
      * @param evt ActionEvent
      */
@@ -336,51 +342,70 @@ public class GUI_Playlist extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButtonVoltarActionPerformed
     /**
-     * Metodo jbRemoveDaPlaylistActionPerformed 
-     * remove a musica da playlist
+     * Metodo jbRemoveDaPlaylistActionPerformed remove a musica da playlist
+     *
      * @param evt ActionEvent
      */
     private void jbRemoveDaPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbRemoveDaPlaylistActionPerformed
-        try {
-            String musica = jtMusica_Playlist.getModel().getValueAt(jtMusica_Playlist.getSelectedRow(), 1).toString();
-            String playlist = jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString();
-            String sql = "DELETE FROM MusicaPlaylist WHERE id_musica=" + musica + " and id_playlist=" + playlist + "";
-            int resp = st.executeUpdate(sql);
-            if (resp == 1) {
-                AtualizaMusicas(playlist);
+        if (jtMusica_Playlist.getSelectedRow() >= 0 && jtPlaylist.getSelectedRow() >= 0) {
+            try {
+                String musica = jtMusica_Playlist.getModel().getValueAt(jtMusica_Playlist.getSelectedRow(), 1).toString();
+                String playlist = jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString();
+                String sql = "DELETE FROM MusicaPlaylist WHERE id_musica=" + musica + " and id_playlist=" + playlist + "";
+                int resp = st.executeUpdate(sql);
+                if (resp == 1) {
+                    AtualizaMusicas(playlist);
+                }
+            } catch (SQLException s) {
+                JOptionPane.showMessageDialog(this, "Informações não excluidas!! " + s.toString());
             }
-        } catch (SQLException s) {
-            JOptionPane.showMessageDialog(this, "Informações não incluida!! " + s.toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione uma Música e uma Playlist");
         }
     }//GEN-LAST:event_jbRemoveDaPlaylistActionPerformed
     /**
-     * Metodo jbAdicionaNaPlaylistActionPerformed 
-     * adiciona a musica na playlist
+     * Metodo jbAdicionaNaPlaylistActionPerformed adiciona a musica na playlist
+     *
      * @param evt ActionEvent
      */
     private void jbAdicionaNaPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdicionaNaPlaylistActionPerformed
-        try {
-            String musica = jtMusica.getModel().getValueAt(jtMusica.getSelectedRow(), 1).toString();
-            String playlist = jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString();
-            String sql = "INSERT INTO MusicaPlaylist (id_musica, id_playlist) values (" + musica + ", " + playlist + ")";
-            int resp = st.executeUpdate(sql);
-            if (resp == 1) {
-                AtualizaMusicas(playlist);
+        if (jtMusica.getSelectedRow() >= 0 && jtPlaylist.getSelectedRow() >= 0) {
+            try {
+                String musica = jtMusica.getModel().getValueAt(jtMusica.getSelectedRow(), 1).toString();
+                String playlist = jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString();
+                String sql = "INSERT INTO MusicaPlaylist (id_musica, id_playlist) values (" + musica + ", " + playlist + ")";
+                int resp = st.executeUpdate(sql);
+                if (resp == 1) {
+                    AtualizaMusicas(playlist);
+                }
+            } catch (SQLException s) {
+                JOptionPane.showMessageDialog(this, "Informações não incluida!! " + s.toString());
             }
-        } catch (SQLException s) {
-            JOptionPane.showMessageDialog(this, "Informações não incluida!! " + s.toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione uma Música e uma Playlist");
         }
     }//GEN-LAST:event_jbAdicionaNaPlaylistActionPerformed
 
-    private void jButtonExcluirPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirPlaylistActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonExcluirPlaylistActionPerformed
+    private void jbExcluirPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirPlaylistActionPerformed
+        if (jtPlaylist.getSelectedRow() >= 0) { //se o usuario selecionou uma linha
+            int codigoSelecionado = Integer.valueOf(jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString());
+            String sql = "DELETE FROM Playlist WHERE id_playlist=" + codigoSelecionado;
+            try {
+                int resp = st.executeUpdate(sql);
+                if (resp == 1) {
+                    ListarPlaylist();
+                    JOptionPane.showMessageDialog(this, "Playlist excluida com sucesso");
+                }
+            } catch (SQLException s) {
+                JOptionPane.showMessageDialog(this, "Informações não excluidas!! " + s.toString());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um registro para Excluir");
+        }
+    }//GEN-LAST:event_jbExcluirPlaylistActionPerformed
 
-
-  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonExcluirPlaylist;
     private javax.swing.JButton jButtonVoltar;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane4;
@@ -388,6 +413,7 @@ public class GUI_Playlist extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JButton jbAdicionaNaPlaylist;
     private javax.swing.JButton jbCriarPlaylist;
+    private javax.swing.JButton jbExcluirPlaylist;
     private javax.swing.JButton jbRemoveDaPlaylist;
     private javax.swing.JTable jtMusica;
     private javax.swing.JTable jtMusica_Playlist;
