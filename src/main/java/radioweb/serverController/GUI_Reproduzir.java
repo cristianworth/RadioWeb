@@ -14,14 +14,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import static radioweb.client.GUIClient.validateIP;
 import radioweb.client.PlayerController;
 
 public class GUI_Reproduzir extends javax.swing.JFrame {
 
     private Statement st;
     private DefaultTableModel tabelaPlaylist;
+    public String ip = "127.0.0.1";
 
     public GUI_Reproduzir() {
         initComponents();
@@ -34,9 +38,9 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
         }
         Listar();
     }
+
     /**
-     * Metodo Listar
-     * Lista as playlists em tela
+     * Metodo Listar Lista as playlists em tela
      */
     public void Listar() {
         String colunas[] = {"Playlists", "Código"};
@@ -71,6 +75,7 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
         jtPlaylist = new javax.swing.JTable();
         jbPlayPlaylist = new javax.swing.JButton();
         jbMenu = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Reproduzir");
@@ -107,34 +112,47 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("IP");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbPlayPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbPlayPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jbMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-                    .addComponent(jbPlayPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbMenu)
+                    .addComponent(jbPlayPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
      /**
      * Metodo jbPlayPlaylistMouseClicked
+     *
      * @deprecated
      * @param evt recebe o MouseEvent
      */
@@ -143,8 +161,8 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
         //BuscaCaminhoDasMusicas(codigoPlaylist);
     }//GEN-LAST:event_jbPlayPlaylistMouseClicked
     /**
-     * Metodo jbMenuMouseClicked
-     * retorna para a tla anterior
+     * Metodo jbMenuMouseClicked retorna para a tla anterior
+     *
      * @param evt recebe o MouseEvent
      */
     private void jbMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbMenuMouseClicked
@@ -153,8 +171,9 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jbMenuMouseClicked
     /**
-     * Metodo jbPlayPlaylistActionPerformed
-     * chama o metodo que busca as musicas no banco
+     * Metodo jbPlayPlaylistActionPerformed chama o metodo que busca as musicas
+     * no banco
+     *
      * @param evt recebe o ActionEvent
      */
     private void jbPlayPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPlayPlaylistActionPerformed
@@ -162,14 +181,43 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
         String codigoPlaylist = jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 1).toString();
         BuscaCaminhoDasMusicas(codigoPlaylist);
     }//GEN-LAST:event_jbPlayPlaylistActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String newip = JOptionPane.showInputDialog(null, "Endereço IPV4 do servidor", "Informe o IP", JOptionPane.INFORMATION_MESSAGE);
+        if (validateIP(newip)) {
+            this.ip = newip;
+        } else {
+            JOptionPane.showMessageDialog(null, "Endereço IPV4 invalido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private static final String PATTERN
+            = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+            + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+            + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+            + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+
     /**
-     * Metodo BuscaCaminhoDasMusicas
-     * busca as musicas no banco e manda para o SenderController
+     * Metodo validateIP Varifica se o IP é valido
+     *
+     * @param ip String IP
+     * @return boolean
+     */
+    public static boolean validateIP(String ip) {
+        Pattern pattern = Pattern.compile(PATTERN);
+        Matcher matcher = pattern.matcher(ip);
+        return matcher.matches();
+    }
+
+    /**
+     * Metodo BuscaCaminhoDasMusicas busca as musicas no banco e manda para o
+     * SenderController
+     *
      * @param codigoPlaylist recebe o codigo da playlist para buscar no banco
      */
     public void BuscaCaminhoDasMusicas(String codigoPlaylist) {
         try {
-            ArrayList<String> caminho = new ArrayList<String>();
+            ArrayList<Musica> caminho = new ArrayList<Musica>();
             String sql = "SELECT Musica.id_musica, Musica.nome_musica, Musica.caminho_musica from MusicaPlaylist\n"
                     + "LEFT JOIN Musica on (Musica.id_musica = MusicaPlaylist.id_musica)\n"
                     + "WHERE id_playlist = " + codigoPlaylist
@@ -177,23 +225,24 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
             ResultSet rec = st.executeQuery(sql);
             while (rec.next()) {
                 try {
-                    caminho.add(Decodifica(rec.getString("caminho_musica")));                    
+                    caminho.add(new Musica(rec.getInt("id_musica"), rec.getString("nome_musica"), Decodifica(rec.getString("caminho_musica"))));
                 } catch (UnsupportedEncodingException ex) {
                     Logger.getLogger(GUI_Reproduzir.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
-          SenderController thread =  new SenderController(caminho);
-          thread.start();
+            SenderController thread = new SenderController(caminho, jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 0).toString(),this.ip);
+            thread.start();
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Erro ao listar!! " + s.toString());
         } catch (IOException ex) {
             Logger.getLogger(GUI_Reproduzir.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
-     * Metodo Decodifica
-     * decodifica url's
+     * Metodo Decodifica decodifica url's
+     *
      * @param caminho recebe a url em URI
      * @return String
      */
@@ -207,6 +256,7 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JButton jbMenu;
     private javax.swing.JButton jbPlayPlaylist;

@@ -45,25 +45,37 @@ public class ServerThread extends Thread {
     ServerSocket serverSocket;
     public volatile static ArrayList<String> ArrBuf = new ArrayList<String>();
     public volatile static LinkedList<MusicProtocol> ArrMPT = new LinkedList<MusicProtocol>();
-    
+
     public ServerThread() throws IOException {
         this("ServerThread");
     }
-
-    public ServerThread(String name) throws IOException {
+        public ServerThread(String name) throws IOException {
         super(name);
-        socket = new DatagramSocket(4445);
+        InetAddress addr = InetAddress.getByName("127.0.0.1");
+        serverSocket = new ServerSocket(6666, 10, addr);
+        socket = new DatagramSocket(4445, addr);
+        System.out.println("Server iniciado no endereço: 127.0.0.1");
     }
-       /**
-   * Metodo runProcess
-   * metodo encarregado de iniciar a thread  process e organizar os arquivos
-   * quando acaba os arquivos, limpa a thread liberando para o servidor inciar outra caso o controllador mande mais arquivos
-   * chama o metodo splitFile para quebrar os arquivos
-   * monta os protocos que vao ser enviados ao client
-   * caso uma musica comece nova, manda para todos os clients conectados usando o sendToAll
-   * @see #splitFile(byte[]) 
-   * @see #sendToAll() 
-   */
+    
+    public ServerThread(String name,String IP) throws IOException {
+        super(name);
+        InetAddress addr = InetAddress.getByName(IP);
+        serverSocket = new ServerSocket(6666, 10, addr);
+        socket = new DatagramSocket(4445, addr);
+        System.out.println("Server iniciado no endereço: "+IP);
+    }
+
+    /**
+     * Metodo runProcess metodo encarregado de iniciar a thread process e
+     * organizar os arquivos quando acaba os arquivos, limpa a thread liberando
+     * para o servidor inciar outra caso o controllador mande mais arquivos
+     * chama o metodo splitFile para quebrar os arquivos monta os protocos que
+     * vao ser enviados ao client caso uma musica comece nova, manda para todos
+     * os clients conectados usando o sendToAll
+     *
+     * @see #splitFile(byte[])
+     * @see #sendToAll()
+     */
     public void runProcess() {
         process = new Thread("Process") {
             public void run() {
@@ -79,7 +91,7 @@ public class ServerThread extends Thread {
                                 chunks = splitFile(mp.getStream());
                                 int i = 0;
                                 for (byte[] b : chunks) {
-                                    music = new MusicProtocol(i, mp.getNome(), b, chunks.size() - 1, mp.getDuracao(), mp.getChunkDuracao());
+                                    music = new MusicProtocol(i, mp.getNome(), b, chunks.size() - 1, mp.getDuracao(), mp.getChunkDuracao(), mp.getPlaylistNome());
                                     mps = music.transformaJson();
                                     senders.add(mps + "\n");
                                     i++;
@@ -98,9 +110,7 @@ public class ServerThread extends Thread {
                         }
                     }
                     process = null;
-                } catch (NoSuchAlgorithmException ex) {
-
-                } catch (InterruptedException ex) {
+                } catch (InterruptedException | NoSuchAlgorithmException ex) {
                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -108,15 +118,18 @@ public class ServerThread extends Thread {
         };
         process.start();
     }
-   /**
-   * Metodo ClockStart
-   * inicia a contagem da musica, a cada ChunkDuracao calculado pelo ServerLoop, -50ms remove uma parte do arquivo
-   * quando o count do clock chega no numero total de arquivos, finaliza a contagem, liberando a thread para enviar mais arquivos
-   * @see #ServerLoop()
-   * @param interval ChunkDuracao em MS dos chunks da musica
-   * @param total total de pedaços no qual foi dividido a musica
-   * @exception InterruptedException
-   */
+
+    /**
+     * Metodo ClockStart inicia a contagem da musica, a cada ChunkDuracao
+     * calculado pelo ServerLoop, -50ms remove uma parte do arquivo quando o
+     * count do clock chega no numero total de arquivos, finaliza a contagem,
+     * liberando a thread para enviar mais arquivos
+     *
+     * @see #ServerLoop()
+     * @param interval ChunkDuracao em MS dos chunks da musica
+     * @param total total de pedaços no qual foi dividido a musica
+     * @exception InterruptedException
+     */
     public void ClockStart(int interval, int total) throws InterruptedException {
         while (this.val < total) {
             Thread.sleep(interval - 50);
@@ -127,18 +140,14 @@ public class ServerThread extends Thread {
         this.val = 0;
     }
 
-   /**
-   * Metodo init
-   * inicia o servidor e as threads para receber a controller e os clients;
-   * @see #receive()
-   * @see #ServerLoop()
-   */
+    /**
+     * Metodo init inicia o servidor e as threads para receber a controller e os
+     * clients;
+     *
+     * @see #receive()
+     * @see #ServerLoop()
+     */
     public void init() {
-        try {
-            serverSocket = new ServerSocket(6666);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
         receive();
         Thread thread = new Thread() {
             public void run() {
@@ -147,24 +156,27 @@ public class ServerThread extends Thread {
         };
         thread.start();
     }
-   /**
-   * Metodo sendToAll
-   * Envia os arquvios da queue para todos os clients conectados
-   * @see #send(java.net.InetAddress, int) 
-   */
+
+    /**
+     * Metodo sendToAll Envia os arquvios da queue para todos os clients
+     * conectados
+     *
+     * @see #send(java.net.InetAddress, int)
+     */
     private void sendToAll() {
         for (int i = 0; i < clients.size(); i++) {
             ServerClient client = clients.get(i);
             send(client.address, client.port);
         }
     }
-   /**
-   * Metodo send
-   * Envia os arquvios da queue para um client
-   * delay de 5ms entre cada arquivo, para o client processar e reduzir perdas em runtime
-   * @param address InetAddress do client
-   * @param port porta do client
-   */
+
+    /**
+     * Metodo send Envia os arquvios da queue para um client delay de 5ms entre
+     * cada arquivo, para o client processar e reduzir perdas em runtime
+     *
+     * @param address InetAddress do client
+     * @param port porta do client
+     */
     private void send(final InetAddress address, final int port) {
         send = new Thread("Send") {
             public void run() {
@@ -179,22 +191,21 @@ public class ServerThread extends Thread {
                             socket.send(packet);
                         }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException ex) {
+                } catch (InterruptedException | IOException ex) {
                     Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         };
         send.start();
     }
-   /**
-   * Metodo ServerLoop
-   * Recebe os arquivos da controller
-   * calcula o tamanho medio de cada arquivo com base nos 10kb que serao enviados por vez para o client
-   * se o processo de envio não esta acontecendo, inicia o mesmo
-   * @see #runProcess() 
-   */
+
+    /**
+     * Metodo ServerLoop Recebe os arquivos da controller calcula o tamanho
+     * medio de cada arquivo com base nos 10kb que serao enviados por vez para o
+     * client se o processo de envio não esta acontecendo, inicia o mesmo
+     *
+     * @see #runProcess()
+     */
     public void ServerLoop() {
         while (true) {
             try {
@@ -219,25 +230,25 @@ public class ServerThread extends Thread {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, e);
             }
             try {
                 new ServerThread().start();
             } catch (IOException ex) {
-
+                Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
     }
-   /**
-   * Metodo receive
-   * Inicia a Thread receive
-   * essa Thread recebe os clients e adiciona eles ao array de clients
-   * se o client enviar Exit, remove ele da lista de clients
-   * se o client ja está na lista, e foi recebido novamente, envia os arquivos novamente
-   * se o client é novo, envia os arquivos
-   * @see #send(java.net.InetAddress, int) 
-   */
+
+    /**
+     * Metodo receive Inicia a Thread receive essa Thread recebe os clients e
+     * adiciona eles ao array de clients se o client enviar Exit, remove ele da
+     * lista de clients se o client ja está na lista, e foi recebido novamente,
+     * envia os arquivos novamente se o client é novo, envia os arquivos
+     *
+     * @see #send(java.net.InetAddress, int)
+     */
     private void receive() {
         receive = new Thread("Receive") {
             public void run() {
@@ -247,7 +258,7 @@ public class ServerThread extends Thread {
                     try {
                         socket.receive(packet);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, e);
                     }
                     String string = new String(packet.getData());
                     if (clients.stream().filter(o -> o.address.equals(packet.getAddress())).findFirst().isPresent()) {
@@ -268,16 +279,17 @@ public class ServerThread extends Thread {
         };
         receive.start();
     }
-   /**
-   * Metodo splitFile
-   * quebra o arquivo em arquivos menores de 10kb
-   * calcula quantos arquivos serao necessarios
-   * retorna um array de array's de bytes representando o arquivo
-   * @param in byte[] representante do arquivo recebido da controller
-   * @return ArrayList<byte[]> 
-   * @exception IOException
-   * @exception NoSuchAlgorithmException
-   */
+
+    /**
+     * Metodo splitFile quebra o arquivo em arquivos menores de 10kb calcula
+     * quantos arquivos serao necessarios retorna um array de array's de bytes
+     * representando o arquivo
+     *
+     * @param in byte[] representante do arquivo recebido da controller
+     * @return ArrayList<byte[]>
+     * @exception IOException
+     * @exception NoSuchAlgorithmException
+     */
     public static ArrayList<byte[]> splitFile(byte[] in) throws IOException, NoSuchAlgorithmException {
         ByteArrayOutputStream out = null;
         long filesize = in.length;

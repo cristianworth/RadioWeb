@@ -53,6 +53,18 @@ public class MusicProtocol implements Serializable  {
         this.duracao = duracao;
         this.playlistNome = playlistNome;
     }
+
+    public MusicProtocol(int index, String nome, byte[] stream, int total, float duracao, int chunkDuracao, String playlistNome) {
+        this.index = index;
+        this.nome = nome;
+        this.stream = stream;
+        this.total = total;
+        this.duracao = duracao;
+        this.chunkDuracao = chunkDuracao;
+        this.playlistNome = playlistNome;
+    }
+
+
     /**
      * Metodo transformaJson
      * transforma um string json em um Objeto MusicProtocol

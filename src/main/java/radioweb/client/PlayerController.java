@@ -19,6 +19,7 @@ import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import java.util.LinkedList;
 import javax.sound.sampled.DataLine.Info;
+import javax.swing.JLabel;
 
 /**
  *
@@ -39,10 +40,19 @@ public class PlayerController extends Thread implements Runnable {
     Thread Play, timeout;
     public volatile AudioFormat outFormat;
     public volatile Info info;
+    public volatile JLabel jLabelMusica;
+    public volatile JLabel jLabelPlaylist;
+    public volatile String ip;
     
     PlayerController() {
         
     }
+
+    public PlayerController(JLabel jLabelMusica, JLabel jLabelPlaylist,String ip) {
+        this.jLabelMusica = jLabelMusica;
+        this.jLabelPlaylist = jLabelPlaylist;
+    }
+    
 
    /**
    * Metodo Run()
@@ -58,7 +68,7 @@ public class PlayerController extends Thread implements Runnable {
             byte[] sendBuf = new byte[30000];
             DatagramSocket socket = new DatagramSocket();
             byte[] buf = new byte[30000];
-            address = InetAddress.getByName("127.0.0.1");
+            address = InetAddress.getByName(ip);
             InputStream myInputStream = null;
             packet = new DatagramPacket(buf, buf.length,
                     address, 4445);
@@ -81,30 +91,25 @@ public class PlayerController extends Thread implements Runnable {
                 System.out.println("index: " + mp.getIndex() + " Total: " + mp.getTotal());
                 i++;
                 if (total == 0) {
+                    jLabelMusica.setText(mp.getNome());
+                    jLabelPlaylist.setText(mp.getPlaylistNome());
                     total = mp.getTotal();
                 }
                 if (mp.getTotal() == mp.getIndex()) {
-                    System.out.println("perda " + (100-((i * 100) / mp.getTotal()))+"%");
-                    System.out.println("terminou");
                     i = 0;
                     total = 0;
                     ArrayList<MusicProtocol> m = (chunksMP);
                     queue.add(m);
-                    System.out.println(queue.getFirst().size());
                     timeout.interrupt();
                     chunksMP = new ArrayList<MusicProtocol>();
                 } else if (total != mp.getTotal()) {
-                    System.out.println("reset");
                     i = 0;
                     total = 0;
                     timeout.interrupt();
                     chunksMP = new ArrayList<MusicProtocol>();
                 }
             }
-        } catch (SocketException ex) {
-        } catch (IOException ex) {
-
-        } catch (InterruptedException ex) {
+        }  catch (InterruptedException | IOException  ex) {
             Logger.getLogger(PlayerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -176,7 +181,7 @@ public class PlayerController extends Thread implements Runnable {
         InetAddress address;
         DatagramPacket packet;
         byte[] buf = new byte[3000];
-        address = InetAddress.getByName("127.0.0.1");
+        address = InetAddress.getByName(ip);
         buf = (new String("Exit").getBytes());
         DatagramSocket socket = new DatagramSocket();
         packet = new DatagramPacket(buf, buf.length,

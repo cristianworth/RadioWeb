@@ -64,7 +64,7 @@ public class GUI_Musica extends javax.swing.JFrame {
     }
     /**
      * Metodo LinhaValida
-     * [ não sei qual a finalidade disso alguem anota aqui ]
+     * Verifica se tem uma linha selecionada
      * @return boolean
      */
     public boolean LinhaValida() {

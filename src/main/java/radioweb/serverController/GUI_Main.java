@@ -16,7 +16,7 @@ public class GUI_Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jbPaciente = new javax.swing.JButton();
+        jbMusica = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jbPlaylist = new javax.swing.JButton();
@@ -25,10 +25,10 @@ public class GUI_Main extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Rádio Web");
 
-        jbPaciente.setText("Música");
-        jbPaciente.addMouseListener(new java.awt.event.MouseAdapter() {
+        jbMusica.setText("Música");
+        jbMusica.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jbPacienteMouseClicked(evt);
+                jbMusicaMouseClicked(evt);
             }
         });
 
@@ -64,7 +64,7 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jbPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbMusica, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jbPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -80,7 +80,7 @@ public class GUI_Main extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbMusica, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbReproduzir, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(36, Short.MAX_VALUE))
@@ -89,15 +89,15 @@ public class GUI_Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     /**
-     * Metodo jbPacienteMouseClicked
+     * Metodo jbMusicaMouseClicked
      * Abre a GUI_Musica
      * @param evt MouseEvent
      */
-    private void jbPacienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbPacienteMouseClicked
+    private void jbMusicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbMusicaMouseClicked
         //Vai chamar a tela de musica
         new GUI_Musica().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jbPacienteMouseClicked
+    }//GEN-LAST:event_jbMusicaMouseClicked
     /**
      * Metodo jbPlaylistMouseClicked
      * Abre a GUI_Playlist
@@ -157,7 +157,7 @@ public class GUI_Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JButton jbPaciente;
+    private javax.swing.JButton jbMusica;
     private javax.swing.JButton jbPlaylist;
     private javax.swing.JButton jbReproduzir;
     // End of variables declaration//GEN-END:variables

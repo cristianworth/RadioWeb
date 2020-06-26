@@ -21,12 +21,15 @@ import org.apache.commons.io.IOUtils;
  */
 public class SenderController extends Thread {
 
-    ArrayList<String> caminhos = new ArrayList<String>();
+    ArrayList<Musica> musicas = new ArrayList<Musica>();
+    String PlaylistNome;
+    String IP;
 
-    public SenderController(ArrayList<String> caminhos) throws IOException {
+    public SenderController(ArrayList<Musica> musicas,String PlaylistNome, String IP) throws IOException {
 
-        this.caminhos = caminhos;
-
+        this.musicas = musicas;
+        this.PlaylistNome = PlaylistNome;
+        this.IP = IP;
     }
     /**
      * Metodo run
@@ -36,14 +39,14 @@ public class SenderController extends Thread {
      */
     public void run() {
         try {
-            try (Socket socket = new Socket("127.0.0.1", 6666)) {
+            try (Socket socket = new Socket(IP, 6666)) {
                 if (socket.isConnected()) {
                     MusicProtocol mp = null;
                     ArrayList<MusicProtocol> mpA = new ArrayList<MusicProtocol>();
-                    for (String c : caminhos) {//mudar pra receber array de musca e o nome da playlist ?
-                        File soundFile = AudioUtil.getSoundFile(c);
+                    for (Musica m : musicas) {//mudar pra receber array de musca e o nome da playlist ?
+                        File soundFile = AudioUtil.getSoundFile(m.getCaminho_musica());
                         FileInputStream in = new FileInputStream(soundFile);
-                        mp = new MusicProtocol("AQUI VAI O NOME DA MUSCIA, e a playlist no ultimo parametro", IOUtils.toByteArray(in), getDurationWithMp3Spi(c));
+                        mp = new MusicProtocol(m.getNome_musica(), IOUtils.toByteArray(in), getDurationWithMp3Spi(m.getCaminho_musica()),PlaylistNome);
                         mpA.add(mp);
                     }
                     ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
