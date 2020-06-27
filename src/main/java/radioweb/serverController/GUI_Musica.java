@@ -389,10 +389,10 @@ public class GUI_Musica extends javax.swing.JFrame {
      * @param evt MouseEvent
      */
     private void jbIncluirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbIncluirMouseClicked
-        if (!jtfNome.getText().equals("")) {
+        if (!jtfNome.getText().equals("") && !jlCaminho.getText().equals("")) {
             Incluir();
         } else {
-            JOptionPane.showMessageDialog(this, "Não é possível criar uma música sem um nome!!");
+            JOptionPane.showMessageDialog(this, "Não é possível criar uma música sem um nome ou caminho!!");
         }
     }//GEN-LAST:event_jbIncluirMouseClicked
     /**

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -49,10 +50,14 @@ public class GUIClient extends javax.swing.JFrame {
      * @exception MalformedURLException
      */
     private void mostraGif() throws MalformedURLException {
-        URL url = new URL("https://cdn.betterttv.net/emote/5805580c3d506fea7ee357d6/3x");
+        Random gerador = new Random();
+        URL url;
+        if (gerador.nextInt(2) == 0) {
+        url = new URL("https://media.tenor.com/images/a70cf6c7c1996c141e33b54428c8ebaa/tenor.gif");
+        }else{
+       url = new URL("https://cdn.betterttv.net/emote/5805580c3d506fea7ee357d6/3x");
+        }
         ImageIcon image = new javax.swing.ImageIcon(url);
-
-        //ImageIcon image = new javax.swing.ImageIcon(getClass().getResource("/tenor.gif"));
         int width = 80;
         int height = 80;
         image.setImage(image.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT));
