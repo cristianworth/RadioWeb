@@ -267,10 +267,12 @@ public class GUIClient extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String newip = JOptionPane.showInputDialog(null, "Endereço IPV4 do servidor", "Informe o IP", JOptionPane.INFORMATION_MESSAGE);
-        if(validateIP(newip)){
+        if (newip != null) {
+            if (validateIP(newip)){
             this.ip = newip;
         }else{
              JOptionPane.showMessageDialog(null, "Endereço IPV4 invalido", "Erro", JOptionPane.INFORMATION_MESSAGE);
+        }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
