@@ -231,7 +231,7 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
                 }
             }
 
-            SenderController thread = new SenderController(caminho, jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 0).toString(),this.ip);
+            SenderController thread = new SenderController(caminho, jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 0).toString(),(this.ip==null?"127.0.0.1":this.ip));
             thread.start();
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Erro ao listar!! " + s.toString());

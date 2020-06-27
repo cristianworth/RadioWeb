@@ -202,7 +202,7 @@ public class GUIClient extends javax.swing.JFrame {
             isSelected = false;
             jbPlayPause.setText("STOP ⏹");
             try {
-                pc = new PlayerController(jLabelMusica, jLabelPlaylist,this.ip);
+                pc = new PlayerController(jLabelMusica, jLabelPlaylist,(this.ip==null?"127.0.0.1":this.ip));
                 pc.start();
             } catch (NullPointerException ex) {
             }
