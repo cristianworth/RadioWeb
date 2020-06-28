@@ -51,6 +51,8 @@ public class PlayerController extends Thread implements Runnable {
     public PlayerController(JLabel jLabelMusica, JLabel jLabelPlaylist,String ip) {
         this.jLabelMusica = jLabelMusica;
         this.jLabelPlaylist = jLabelPlaylist;
+        this.ip = ip;
+
     }
     
 
