@@ -223,14 +223,14 @@ public class GUIClient extends javax.swing.JFrame {
      */
     private void jsVolumeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jsVolumeStateChanged
         Mixer.Info[] mixers = AudioSystem.getMixerInfo();
-        System.out.println("There are " + mixers.length + " mixer info objects");
+        //System.out.println("There are " + mixers.length + " mixer info objects");
         for (Mixer.Info mixerInfo : mixers) {
-            System.out.println("Mixer name: " + mixerInfo.getName());
+            //System.out.println("Mixer name: " + mixerInfo.getName());
             Mixer mixer = AudioSystem.getMixer(mixerInfo);
 
             Line.Info[] lineInfos = mixer.getTargetLineInfo(); // target, not source  
             for (Line.Info lineInfo : lineInfos) {
-                System.out.println("  Line.Info: " + lineInfo);
+                //System.out.println("  Line.Info: " + lineInfo);
                 Line line = null;
                 boolean opened = true;
                 try {
@@ -245,11 +245,11 @@ public class GUIClient extends javax.swing.JFrame {
                     if (!mixer.isLineSupported(Port.Info.MICROPHONE)) {
                         volCtrl.setValue(volume);
                     }
-                    System.out.println("    volCtrl.getValue() = " + volCtrl.getValue());
+                    //System.out.println("    volCtrl.getValue() = " + volCtrl.getValue());
                 } catch (LineUnavailableException e) {
                     e.printStackTrace();
                 } catch (IllegalArgumentException iaEx) {
-                    System.out.println("    " + iaEx);
+                    //System.out.println("    " + iaEx);
                 } finally {
                     if (line != null && !opened) {
                         line.close();
@@ -257,7 +257,7 @@ public class GUIClient extends javax.swing.JFrame {
                 }
             }
         }
-        System.out.println("var" + volume);
+        //System.out.println("var" + volume);
         System.out.println("Volume atual: " + jsVolume.getValue() / 100);
     }//GEN-LAST:event_jsVolumeStateChanged
 
@@ -266,7 +266,7 @@ public class GUIClient extends javax.swing.JFrame {
     }//GEN-LAST:event_jsVolumeMouseReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String newip = JOptionPane.showInputDialog(null, "Endereço IPV4 do servidor", "Informe o IP", JOptionPane.INFORMATION_MESSAGE);
+        String newip = JOptionPane.showInputDialog(null, "Endereço IPV4 do servidor\n Endereço atual: "+this.ip, "Informe o IP", JOptionPane.INFORMATION_MESSAGE);
         if (newip != null) {
             if (validateIP(newip)){
             this.ip = newip;

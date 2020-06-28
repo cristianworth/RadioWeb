@@ -63,7 +63,6 @@ public class PlayerController extends Thread implements Runnable {
     public void run() {
         try {
             queue.clear();
-            int port;
             InetAddress address;
             DatagramPacket packet;
             DatagramSocket socket = new DatagramSocket();
@@ -73,13 +72,12 @@ public class PlayerController extends Thread implements Runnable {
             packet = new DatagramPacket(buf, buf.length,
                     address, 4445);
             socket.send(packet);
-            System.out.println("connected");
             play();
-            int i = 0;
             int total = 0;
             chunksMP = new ArrayList<MusicProtocol>();
+            jLabelPlaylist.setText("Conectando...");
+            jLabelMusica.setText("Aguarde...");
             while (true) {
-                System.out.println("recieving");
                 packet = new DatagramPacket(buf, buf.length);
                 if (total > 0) {
                     timeOut();
@@ -88,25 +86,22 @@ public class PlayerController extends Thread implements Runnable {
                 String received = new String(packet.getData(), 0, packet.getLength());
                 MusicProtocol mp = new MusicProtocol().getProtocolo(received);
                 chunksMP.add(mp);
-                System.out.println("index: " + mp.getIndex() + " Total: " + mp.getTotal());
-                i++;
+                System.out.println(mp.getIndex() + "/" + mp.getTotal());
                 if (total == 0) {
                     jLabelMusica.setText(mp.getNome());
                     jLabelPlaylist.setText(mp.getPlaylistNome());
                     total = mp.getTotal();
                 }
                 if (mp.getTotal() == mp.getIndex()) {
-                    i = 0;
                     total = 0;
                     ArrayList<MusicProtocol> m = (chunksMP);
                     queue.add(m);
                     timeout.interrupt();
-                    chunksMP = new ArrayList<MusicProtocol>();
+                    chunksMP = new ArrayList<>();
                 } else if (total != mp.getTotal()) {
-                    i = 0;
                     total = 0;
                     timeout.interrupt();
-                    chunksMP = new ArrayList<MusicProtocol>();
+                    chunksMP = new ArrayList<>();
                 }
             }
         }  catch (InterruptedException | IOException  ex) {
@@ -127,10 +122,10 @@ public class PlayerController extends Thread implements Runnable {
             public void run() {
                 try {
                     timeout.sleep(10000);
-                    System.out.println("timeout");
+                    System.out.println("Timeout");
                     ArrayList<MusicProtocol> m = (chunksMP);
                     queue.add(m);
-                    chunksMP = new ArrayList<MusicProtocol>();
+                    chunksMP = new ArrayList<>();
                 } catch (InterruptedException ex) {
 
                 }
