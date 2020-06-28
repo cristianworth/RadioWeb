@@ -242,7 +242,7 @@ public class GUIClient extends javax.swing.JFrame {
                     float v1 = jsVolume.getValue();
                     volume = v1 / 100;
                     FloatControl volCtrl = (FloatControl) line.getControl(FloatControl.Type.VOLUME);
-                    if (mixer.isLineSupported(Port.Info.SPEAKER)) {
+                    if (!mixer.isLineSupported(Port.Info.MICROPHONE)) {
                         volCtrl.setValue(volume);
                     }
                     System.out.println("    volCtrl.getValue() = " + volCtrl.getValue());
