@@ -25,7 +25,7 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
 
     private Statement st;
     private DefaultTableModel tabelaPlaylist;
-    public String ip = "127.0.0.1";
+    private String ip = "127.0.0.1";
 
     public GUI_Reproduzir() {
         initComponents();
@@ -36,6 +36,19 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
             Logger.getLogger(GUI_Playlist.class.getName()).log(Level.SEVERE, null, e); //log de erro
             System.out.println("Error: " + e.toString() + e.getMessage());
         }
+        Listar();
+    }
+
+    public GUI_Reproduzir(String ip) {
+        initComponents();
+        this.setLocationRelativeTo(null); //coloca o frame centralizado na tela
+        try {
+            st = new DBConexao().getConnection(); //faz a conexão com o banco de dados
+        } catch (Exception e) {
+            Logger.getLogger(GUI_Playlist.class.getName()).log(Level.SEVERE, null, e); //log de erro
+            System.out.println("Error: " + e.toString() + e.getMessage());
+        }
+        this.ip = ip;
         Listar();
     }
 
@@ -75,7 +88,6 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
         jtPlaylist = new javax.swing.JTable();
         jbPlayPlaylist = new javax.swing.JButton();
         jbMenu = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Reproduzir");
@@ -112,13 +124,6 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("IP");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -129,9 +134,7 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(55, 55, 55)
                         .addComponent(jbPlayPlaylist, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -143,8 +146,7 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbMenu)
-                    .addComponent(jbPlayPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jbPlayPlaylist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -167,7 +169,6 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
      */
     private void jbMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbMenuMouseClicked
         //volta para o menu principal
-        new GUI_Main().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jbMenuMouseClicked
     /**
@@ -182,32 +183,6 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
         BuscaCaminhoDasMusicas(codigoPlaylist);
     }//GEN-LAST:event_jbPlayPlaylistActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String newip = JOptionPane.showInputDialog(null, "Endereço IPV4 do servidor", "Informe o IP", JOptionPane.INFORMATION_MESSAGE);
-        if (validateIP(newip)) {
-            this.ip = newip;
-        } else {
-            JOptionPane.showMessageDialog(null, "Endereço IPV4 invalido", "Erro", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private static final String PATTERN
-            = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
-            + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
-            + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
-            + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-
-    /**
-     * Metodo validateIP Varifica se o IP é valido
-     *
-     * @param ip String IP
-     * @return boolean
-     */
-    public static boolean validateIP(String ip) {
-        Pattern pattern = Pattern.compile(PATTERN);
-        Matcher matcher = pattern.matcher(ip);
-        return matcher.matches();
-    }
 
     /**
      * Metodo BuscaCaminhoDasMusicas busca as musicas no banco e manda para o
@@ -231,7 +206,7 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
                 }
             }
 
-            SenderController thread = new SenderController(caminho, jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 0).toString(),(this.ip==null?"127.0.0.1":this.ip));
+            SenderController thread = new SenderController(caminho, jtPlaylist.getModel().getValueAt(jtPlaylist.getSelectedRow(), 0).toString(), (this.ip == null ? "127.0.0.1" : this.ip));
             thread.start();
         } catch (SQLException s) {
             JOptionPane.showMessageDialog(this, "Erro ao listar!! " + s.toString());
@@ -256,7 +231,6 @@ public class GUI_Reproduzir extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JButton jbMenu;
     private javax.swing.JButton jbPlayPlaylist;

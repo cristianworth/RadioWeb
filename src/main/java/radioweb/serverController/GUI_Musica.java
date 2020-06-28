@@ -433,7 +433,6 @@ public class GUI_Musica extends javax.swing.JFrame {
      */
     private void jbMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbMenuMouseClicked
         //volta para o menu principal
-        new GUI_Main().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jbMenuMouseClicked
     /**

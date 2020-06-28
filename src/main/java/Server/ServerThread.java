@@ -232,11 +232,11 @@ public class ServerThread extends Thread {
             } catch (Exception e) {
                 Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, e);
             }
-            try {
-                new ServerThread().start();
-            } catch (IOException ex) {
-                Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            //try {
+              //new ServerThread().start();
+            //} catch (IOException ex) {
+             //   Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+           // }
         }
 
     }

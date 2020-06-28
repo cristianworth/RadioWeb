@@ -338,7 +338,6 @@ public class GUI_Playlist extends javax.swing.JFrame {
      */
     private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
         //volta para o main
-        new GUI_Main().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonVoltarActionPerformed
     /**

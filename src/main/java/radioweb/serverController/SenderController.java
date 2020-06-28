@@ -50,7 +50,6 @@ public class SenderController extends Thread {
                         mpA.add(mp);
                     }
                     ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                    System.out.println();
                     out.writeObject(mpA);
                     out.flush();
                 }

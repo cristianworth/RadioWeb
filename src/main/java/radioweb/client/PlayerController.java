@@ -51,6 +51,7 @@ public class PlayerController extends Thread implements Runnable {
     public PlayerController(JLabel jLabelMusica, JLabel jLabelPlaylist,String ip) {
         this.jLabelMusica = jLabelMusica;
         this.jLabelPlaylist = jLabelPlaylist;
+        this.ip = ip;
     }
     
 
@@ -65,11 +66,10 @@ public class PlayerController extends Thread implements Runnable {
             int port;
             InetAddress address;
             DatagramPacket packet;
-            byte[] sendBuf = new byte[30000];
             DatagramSocket socket = new DatagramSocket();
             byte[] buf = new byte[30000];
+            System.out.println(ip);
             address = InetAddress.getByName(ip);
-            InputStream myInputStream = null;
             packet = new DatagramPacket(buf, buf.length,
                     address, 4445);
             socket.send(packet);
