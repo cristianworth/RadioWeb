@@ -25,11 +25,9 @@ import javax.swing.JLabel;
  *
  * @author Marcelo
  */
-   /**
-    * Classe PlayerController
-    * responsavel por administrar a reprodução do client
-   */
-
+/**
+ * Classe PlayerController responsavel por administrar a reprodução do client
+ */
 public class PlayerController extends Thread implements Runnable {
 
     private Player mp3Player;
@@ -43,23 +41,21 @@ public class PlayerController extends Thread implements Runnable {
     public volatile JLabel jLabelMusica;
     public volatile JLabel jLabelPlaylist;
     public volatile String ip;
-    
+
     PlayerController() {
-        
+
     }
 
-    public PlayerController(JLabel jLabelMusica, JLabel jLabelPlaylist,String ip) {
+    public PlayerController(JLabel jLabelMusica, JLabel jLabelPlaylist, String ip) {
         this.jLabelMusica = jLabelMusica;
         this.jLabelPlaylist = jLabelPlaylist;
         this.ip = ip;
     }
-    
 
-   /**
-   * Metodo Run()
-   * inicia conexçao com o servidor, fica idle até receber um retorno;
-   * quando recebe o ultimo arquivo da musica, inicicia a reprodução
-   */
+    /**
+     * Metodo Run() inicia conexçao com o servidor, fica idle até receber um
+     * retorno; quando recebe o ultimo arquivo da musica, inicicia a reprodução
+     */
     public void run() {
         try {
             queue.clear();
@@ -104,16 +100,17 @@ public class PlayerController extends Thread implements Runnable {
                     chunksMP = new ArrayList<>();
                 }
             }
-        }  catch (InterruptedException | IOException  ex) {
+        } catch (InterruptedException | IOException ex) {
             Logger.getLogger(PlayerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-   /**
-    * Metodo timeOut()
-    * inicia assim que começa o recebimento dos arquivos da musica
-    * apos 10s sem receber nada, inicia a reprodução
-    * @exception InterruptedException
-   */
+
+    /**
+     * Metodo timeOut() inicia assim que começa o recebimento dos arquivos da
+     * musica apos 10s sem receber nada, inicia a reprodução
+     *
+     * @exception InterruptedException
+     */
     public void timeOut() throws InterruptedException {
         if (timeout != null) {
             timeout.interrupt();
@@ -134,12 +131,13 @@ public class PlayerController extends Thread implements Runnable {
         };
         timeout.start();
     }
-   /**
-    * Metodo play()
-    * inicia a Thread que une os arquivos e começa a tocar os arquivos da musica
-    * fica em idle até ter algo para tocar
-    * @see #mergeFileParts(java.util.ArrayList) 
-   */
+
+    /**
+     * Metodo play() inicia a Thread que une os arquivos e começa a tocar os
+     * arquivos da musica fica em idle até ter algo para tocar
+     *
+     * @see #mergeFileParts(java.util.ArrayList)
+     */
     public void play() {
         Play = new Thread("Play") {
             public void run() {
@@ -161,17 +159,20 @@ public class PlayerController extends Thread implements Runnable {
         };
         Play.start();
     }
-   /**
-    * Metodo close()
-    * finaliza todas as threads e para a musica
-    * notifica o servidor que o cliente desconectou
-    * @exception SocketException
-    * @exception IOException
-   */
+
+    /**
+     * Metodo close() finaliza todas as threads e para a musica notifica o
+     * servidor que o cliente desconectou
+     *
+     * @exception SocketException
+     * @exception IOException
+     */
     public void close() throws SocketException, IOException {
         if (mp3Player != null) {
             mp3Player.close();
         }
+        jLabelPlaylist.setText("");
+        jLabelMusica.setText("");
         Play.interrupt();
         InetAddress address;
         DatagramPacket packet;
@@ -183,14 +184,15 @@ public class PlayerController extends Thread implements Runnable {
                 address, 4445);
         socket.send(packet);
     }
-   /**
-    * Metodo mergeFileParts()
-    * recebe um Array de partes de musica, une em um arquivo só
-    * Retorna um arquivo reproduzivel
-    * @param queue Array de pedaços do arquivo, dentro do protocolo
-    * @return byte[]
-    * @exception IOException
-   */
+
+    /**
+     * Metodo mergeFileParts() recebe um Array de partes de musica, une em um
+     * arquivo só Retorna um arquivo reproduzivel
+     *
+     * @param queue Array de pedaços do arquivo, dentro do protocolo
+     * @return byte[]
+     * @exception IOException
+     */
     private byte[] mergeFileParts(ArrayList<MusicProtocol> queue) throws IOException {
         InputStream inp = null;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
